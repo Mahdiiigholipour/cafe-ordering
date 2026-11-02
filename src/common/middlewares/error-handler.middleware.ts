@@ -7,6 +7,8 @@ export function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
+  if (res.headersSent) return next(err);
+
   let statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
   let code = ErrorCodes.INTERNAL_SERVER_ERROR;
   let message = "Something went wrong";
