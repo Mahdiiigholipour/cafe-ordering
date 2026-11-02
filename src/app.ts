@@ -1,8 +1,8 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import { ErrorHandler } from "./common/middlewares/error-handler.middleware";
-import { NotFoundHandler } from "./common/middlewares/not-found.middleware";
+import { errorHandler } from "./common/middlewares/error-handler.middleware";
+import { notFoundHandler } from "./common/middlewares/not-found.middleware";
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.get("/health", (req, res) => {
 });
 
 // Error handlers
-app.use(NotFoundHandler);
-app.use(ErrorHandler);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;
