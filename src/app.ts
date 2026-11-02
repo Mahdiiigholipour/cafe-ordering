@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.get("/health", (req, res) => {
-  res.json({ status: "Ok" });
+  res.json({ status: "ok" });
 });
 
 export default app;
