@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import env from "../../config/env";
 import { AppError, ErrorCodes, HttpStatusCodes } from "../errors";
 
 export function errorHandler(
@@ -26,6 +27,7 @@ export function errorHandler(
     error: {
       code,
       message,
+      ...(env.NODE_ENV === "development" && { stack: err.stack }),
     },
   });
 }
