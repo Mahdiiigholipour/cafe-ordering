@@ -13,3 +13,4 @@ export * from "./http/too-many-requests.error";
 export * from "./http/unauthorized.error";
 export * from "./http/unprocessable-entity.error";
 export * from "./http/unsupported-media-type.error";
+export * from "./http/validation.error";

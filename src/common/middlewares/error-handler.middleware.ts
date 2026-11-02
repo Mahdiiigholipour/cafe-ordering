@@ -1,6 +1,13 @@
 import { NextFunction, Request, Response } from "express";
+import { ZodError } from "zod";
 import env from "../../config/env";
-import { AppError, ErrorCodes, HttpStatusCodes } from "../errors";
+import {
+  AppError,
+  BadRequestError,
+  ErrorCodes,
+  HttpStatusCodes,
+  ValidationError,
+} from "../errors";
 
 export function errorHandler(
   err: Error,
@@ -13,11 +20,34 @@ export function errorHandler(
   let statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
   let code = ErrorCodes.INTERNAL_SERVER_ERROR;
   let message = "Something went wrong";
+  let details;
 
+  // Handle zod validator's errors
+  if (err instanceof ZodError) {
+    err = new ValidationError(
+      "Invalid input",
+      err.issues.map((i) => ({ field: i.path.join("."), message: i.message })),
+    );
+  }
+
+  //Handle malformed json errors
+  if (
+    typeof err === "object" &&
+    err !== null &&
+    "type" in err &&
+    err.type === "entity.parse.failed"
+  ) {
+    err = new BadRequestError("Invalid JSON body");
+  }
+
+  // Handle http errors
   if (err instanceof AppError && err.isOperational) {
     statusCode = err.statusCode;
     code = err.code;
     message = err.message;
+
+    if (err.code === ErrorCodes.VALIDATION_ERROR && "details" in err)
+      details = err.details;
   } else {
     console.error(err);
   }
@@ -27,6 +57,7 @@ export function errorHandler(
     error: {
       code,
       message,
+      details,
       ...(env.NODE_ENV === "development" && { stack: err.stack }),
     },
   });
