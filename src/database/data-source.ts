@@ -11,6 +11,6 @@ export const AppDataSource = new DataSource({
   password: env.DB_PASSWORD,
   charset: "utf8mb4",
   synchronize: false,
-  entities: [path.join(__dirname, "src/modules/**/*.entity.{js,ts}")],
-  migrations: [path.join(__dirname, "src/database/migrations/*.{js,ts}")],
+  entities: [path.join(__dirname, "../modules/**/*.entity.{js,ts}")],
+  migrations: [path.join(__dirname, "migrations/*.{js,ts}")],
 });
