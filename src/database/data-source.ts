@@ -1,6 +1,7 @@
 import path from "node:path";
 import { DataSource } from "typeorm";
 import env from "../config/env";
+import { SnakeCaseNamingStrategy } from "./naming-strategy";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -13,4 +14,5 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   entities: [path.join(__dirname, "../modules/**/*.entity.{js,ts}")],
   migrations: [path.join(__dirname, "migrations/*.{js,ts}")],
+  namingStrategy: new SnakeCaseNamingStrategy(),
 });
