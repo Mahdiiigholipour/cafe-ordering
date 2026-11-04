@@ -30,11 +30,14 @@ export class OrderItemEntity extends AppBaseEntity {
   @Column({ type: "varchar", length: 36 })
   orderId!: string;
 
-  @ManyToOne(() => OrderEntity, (order) => order.items)
+  @ManyToOne(() => OrderEntity, (order) => order.items, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   @JoinColumn({ name: "order_id" })
   order?: OrderEntity;
 
-  @Column({ type: "varchar", length: 36 })
+  @Column({ type: "varchar", length: 36, nullable: true })
   productId!: string;
 
   @ManyToOne(() => ProductEntity, { onDelete: "SET NULL", nullable: true })
