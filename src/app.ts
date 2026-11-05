@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { errorHandler } from "./common/middlewares/error-handler.middleware";
 import { notFoundHandler } from "./common/middlewares/not-found.middleware";
+import { AppRouter } from "./router";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use("/api", AppRouter);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
