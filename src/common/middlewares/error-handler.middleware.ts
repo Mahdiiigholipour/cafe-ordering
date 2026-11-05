@@ -8,6 +8,7 @@ import {
   HttpStatusCodes,
   ValidationError,
 } from "../errors";
+import { mapDatabaseError } from "../errors/database-error.mapper";
 
 export function errorHandler(
   err: Error,
@@ -17,6 +18,7 @@ export function errorHandler(
 ) {
   if (res.headersSent) return next(err);
 
+  const originalError = err;
   let statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
   let code = ErrorCodes.INTERNAL_SERVER_ERROR;
   let message = "Something went wrong";
@@ -30,7 +32,7 @@ export function errorHandler(
     );
   }
 
-  //Handle malformed json errors
+  // Handle malformed json errors
   if (
     typeof err === "object" &&
     err !== null &&
@@ -39,6 +41,10 @@ export function errorHandler(
   ) {
     err = new BadRequestError("Invalid JSON body");
   }
+
+  // Handle MySQL errors
+  const databaseError = mapDatabaseError(err);
+  if (databaseError) err = databaseError;
 
   // Handle http errors
   if (err instanceof AppError && err.isOperational) {
@@ -58,7 +64,7 @@ export function errorHandler(
       code,
       message,
       details,
-      ...(env.NODE_ENV === "development" && { stack: err.stack }),
+      ...(env.NODE_ENV === "development" && { stack: originalError.stack }),
     },
   });
 }
