@@ -15,6 +15,16 @@ const envSchema = z.object({
 
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().trim().min(1, "JWT_EXPIRES_IN is required"),
+
+  ADMIN_USERNAME: z
+    .string()
+    .trim()
+    .min(8, "ADMIN_USERNAME must be at least 8 characters"),
+
+  ADMIN_PASSWORD: z
+    .string()
+    .trim()
+    .min(8, "ADMIN_PASSWORD must be at least 8 characters"),
 });
 
 const result = envSchema.safeParse(process.env);
