@@ -14,7 +14,14 @@ const envSchema = z.object({
   DB_NAME: z.string().trim().min(1, "DB_NAME is required"),
 
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
-  JWT_EXPIRES_IN: z.string().trim().min(1, "JWT_EXPIRES_IN is required"),
+  JWT_EXPIRES_IN: z
+    .string()
+    .trim()
+    .regex(
+      /^\d+(ms|s|m|h|d|w|y)$/,
+      "JWT_EXPIRES_IN must be a valid duration (e.g. 15m, 1h, 7d)",
+    )
+    .min(1, "JWT_EXPIRES_IN is required"),
 
   ADMIN_USERNAME: z
     .string()
