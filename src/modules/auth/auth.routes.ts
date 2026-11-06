@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authService } from ".";
+import { authenticate, authService } from ".";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { AuthController } from "./auth.controller";
 import { LoginRateLimiter } from "./login-rate-limiter";
@@ -15,5 +15,7 @@ router.post(
   validate({ body: LoginSchema }),
   authController.login,
 );
+
+router.get("/me", authenticate, authController.getMe);
 
 export default router;
