@@ -1,0 +1,17 @@
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3OTQzMzI1NjUsImV4cCI6MTc5NDMzMzQ2NSwic3ViIjoiMTc5ZjI3NWMtM2E3OC00M2IzLWIzZDctNTY4ZGJmN2IzZDZhIn0.C6WmbbU1naWQrc6WTxxpmv9aeAYog4Ym4IL_9C-W_QY
+@staffAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3OTQzMzQzMDMsImV4cCI6MTc5NDMzNTIwMywic3ViIjoiZTFlNzdiOTEtYjM2Ni00ZmM0LWFmMDUtNDdhYWE5MjcxYWFmIn0.DOg75Arb4gRNpQ5wjrz7-0XfG0CTZyakG6s3TiTwzg4
+### Health endpoint
+GET http://localhost:3000/health
+
+### Login enpoint 
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "staff123",
+    "password": "staff123"
+}
+
+### Me endpoint
+GET http://localhost:3000/api/auth/me
+Authorization: bearer {{staffAccessToken}}

@@ -6,5 +6,5 @@ export function notFoundHandler(
   res: Response,
   next: NextFunction,
 ) {
-  next(new NotFoundError("Route not found!"));
+  next(new NotFoundError(`Not found route: ${req.url}`));
 }
