@@ -3,6 +3,7 @@ import { authenticate, authService } from ".";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { AuthController } from "./auth.controller";
 import { LoginRateLimiter } from "./login-rate-limiter";
+import { authorize } from "./middlewares/authorize.middleware";
 import { LoginSchema } from "./schemas/login.schema";
 
 const router = Router();
@@ -16,6 +17,6 @@ router.post(
   authController.login,
 );
 
-router.get("/me", authenticate, authController.getMe);
+router.get("/me", authenticate, authorize(), authController.getMe);
 
 export default router;
