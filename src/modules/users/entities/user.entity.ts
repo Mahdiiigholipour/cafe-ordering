@@ -10,7 +10,7 @@ export class UserEntity extends AppBaseEntity {
   @Column({ type: "varchar", length: 50, unique: true })
   username!: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, select: false })
   password!: string;
 
   @Column({ type: "enum", enum: UserRoles, default: UserRoles.Staff })

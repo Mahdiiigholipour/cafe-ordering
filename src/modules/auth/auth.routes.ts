@@ -7,7 +7,6 @@ import { authorize } from "./middlewares/authorize.middleware";
 import { LoginSchema } from "./schemas/login.schema";
 
 const router = Router();
-
 const authController = new AuthController(authService);
 
 router.post(
