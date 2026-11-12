@@ -6,4 +6,5 @@ import { UsersService } from "./users.service";
 const usersRepository = new UsersRepository(
   AppDataSource.getRepository(UserEntity),
 );
+
 export const usersService = new UsersService(usersRepository);
