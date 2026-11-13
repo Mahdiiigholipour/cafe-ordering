@@ -8,9 +8,6 @@ export class ProductEntity extends AppBaseEntity {
   @Column({ type: "varchar", length: 100 })
   name!: string;
 
-  @Column({ type: "varchar", length: 120, unique: true })
-  slug!: string;
-
   @Column({ type: "int", unsigned: true })
   price!: number;
 

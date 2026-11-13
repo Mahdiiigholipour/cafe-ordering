@@ -7,9 +7,6 @@ export class CategoryEntity extends AppBaseEntity {
   @Column({ type: "varchar", length: 100 })
   name!: string;
 
-  @Column({ type: "varchar", length: 120, unique: true })
-  slug!: string;
-
   @Column({ type: "varchar", length: 255, nullable: true })
   description!: string | null;
 
