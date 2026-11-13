@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authenticate, authService } from ".";
+import { UserRoles } from "../../common/enums/user-roles.enum";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { AuthController } from "./auth.controller";
 import { LoginRateLimiter } from "./login-rate-limiter";
@@ -16,6 +17,11 @@ router.post(
   authController.login,
 );
 
-router.get("/me", authenticate, authorize(), authController.getMe);
+router.get(
+  "/me",
+  authenticate,
+  authorize(UserRoles.Staff),
+  authController.getMe,
+);
 
 export default router;
