@@ -38,4 +38,6 @@ export enum CategoriesMessages {
   // Protection
   CATEGORY_HAS_PRODUCTS = "Category cannot be deleted because it contains products.",
   CATEGORY_IN_USE = "Category cannot be deleted because it is currently in use.",
+
+  AT_LEAST_ONE_FIELD = "In update body, least one field required",
 }

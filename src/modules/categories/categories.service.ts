@@ -7,7 +7,7 @@ import { CategoryResponse } from "./interfaces/category-response.interface";
 export class CategoriesService {
   constructor(private readonly categoriesRepo: CategoriesRepository) {}
 
-  async getAll(isActive?: boolean) {
+  async list(isActive?: boolean) {
     const categories = await this.categoriesRepo.findAll({ isActive });
     return categories.map(this.toCategoryResponse);
   }
