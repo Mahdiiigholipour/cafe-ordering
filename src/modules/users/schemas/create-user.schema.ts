@@ -1,25 +1,22 @@
 import z from "zod";
 import { UsersMessages } from "../../../common/enums/messages/users.messages";
 import { UserRoles } from "../../../common/enums/user-roles.enum";
-import { isValidBcryptPassword } from "../../../common/utils/password.util";
+import { PasswordSchema } from "./password-schema";
 
-export const CreateUserSchema = z.object({
-  fullName: z.string().min(5).max(50).optional().default("user"),
-  username: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .min(3, UsersMessages.USERNAME_REQUIRED)
-    .max(32, UsersMessages.USERNAME_MAX)
-    .regex(/^[a-z0-9_.]+$/, UsersMessages.USERNAME_ALLOWED_CHARS),
+export const CreateUserSchema = z
+  .object({
+    fullName: z.string().trim().min(2).max(50),
+    username: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .min(3, UsersMessages.USERNAME_REQUIRED)
+      .max(32, UsersMessages.USERNAME_MAX_LENGTH)
+      .regex(/^[a-z0-9_.]+$/, UsersMessages.USERNAME_INVALID_FORMAT),
 
-  password: z
-    .string()
-    .trim()
-    .min(8, UsersMessages.PASSWORD_MIN)
-    .refine(isValidBcryptPassword, UsersMessages.PASSWORD_MAX),
-
-  role: z.enum(UserRoles),
-});
+    password: PasswordSchema,
+    role: z.enum(UserRoles),
+  })
+  .strict();
 
 export type CreateUserDto = z.output<typeof CreateUserSchema>;

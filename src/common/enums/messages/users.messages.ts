@@ -16,4 +16,6 @@ export enum UsersMessages {
   CANNOT_MODIFY_SELF = "You cannot modify your own account.",
   CANNOT_DELETE_SELF = "You cannot delete your own account.",
   LAST_ADMIN_PROTECTED = "Cannot modify or remove the last active administrator.",
+
+  UPDATE_EMPTY = "`role` or `isActive` is required",
 }
