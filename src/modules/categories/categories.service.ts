@@ -3,6 +3,8 @@ import { ConflictError, NotFoundError } from "../../common/errors";
 import { CategoriesRepository } from "./categories.repository";
 import { CategoryEntity } from "./category.entity";
 import { CategoryResponse } from "./interfaces/category-response.interface";
+import { CreateCategoryDto } from "./schemas/create-category.schema";
+import { UpdateCategoryDto } from "./schemas/update-category.schema";
 
 export class CategoriesService {
   constructor(private readonly categoriesRepo: CategoriesRepository) {}
@@ -20,7 +22,7 @@ export class CategoriesService {
     return this.toCategoryResponse(category);
   }
 
-  async create(dto: any) {
+  async create(dto: CreateCategoryDto) {
     const existCategory = await this.categoriesRepo.findByName(dto.name);
     if (existCategory)
       throw new ConflictError(CategoriesMessages.CATEGORY_ALREADY_EXISTS);
@@ -29,12 +31,15 @@ export class CategoriesService {
     return this.toCategoryResponse(created);
   }
 
-  async update(id: string, dto: any) {
+  async update(id: string, dto: UpdateCategoryDto) {
     const category = await this.categoriesRepo.findById(id);
     if (!category)
       throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
 
-    if (dto.name !== undefined && dto.name !== category.name) {
+    if (
+      dto.name !== undefined &&
+      dto.name.toLowerCase() !== category.name.toLowerCase()
+    ) {
       const existCategory = await this.categoriesRepo.findByName(dto.name);
       if (existCategory)
         throw new ConflictError(CategoriesMessages.CATEGORY_ALREADY_EXISTS);
