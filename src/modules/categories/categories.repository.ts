@@ -1,0 +1,49 @@
+import { FindOptionsWhere, Repository } from "typeorm";
+import { ProductEntity } from "../products/entities/product.entity";
+import { CategoryEntity } from "./category.entity";
+import { CreateCategoryDto } from "./schemas/create-category.schema";
+import { UpdateCategoryDto } from "./schemas/update-category.schema";
+
+export class CategoriesRepository {
+  constructor(
+    private readonly repository: Repository<CategoryEntity>,
+    private readonly productsRepository: Repository<ProductEntity>,
+  ) {}
+
+  async findById(id: string) {
+    return this.repository.findOneBy({ id });
+  }
+
+  async findByName(name: string) {
+    return this.repository.findOneBy({ name });
+  }
+
+  async findAll(filters?: { isActive: boolean | undefined }) {
+    const where: FindOptionsWhere<CategoryEntity> = {};
+
+    if (filters?.isActive !== undefined) where.isActive = filters.isActive;
+
+    return this.repository.find({ where });
+  }
+
+  async create(data: CreateCategoryDto) {
+    const category = this.repository.create(data);
+    return this.repository.save(category);
+  }
+
+  async update(category: CategoryEntity, data: UpdateCategoryDto) {
+    if (data.description !== undefined) category.description = data.description;
+    if (data.name !== undefined) category.name = data.name;
+    if (data.isActive !== undefined) category.isActive = data.isActive;
+
+    return this.repository.save(category);
+  }
+
+  async delete(id: string) {
+    return this.repository.delete({ id });
+  }
+
+  async countProductsByCategoryId(categoryId: string) {
+    return this.productsRepository.countBy({ categoryId });
+  }
+}
