@@ -39,6 +39,11 @@ export class CategoriesRepository {
     return this.repository.save(category);
   }
 
+  async updateImage(category: CategoryEntity, image: string | null) {
+    category.image = image;
+    return this.repository.save(category);
+  }
+
   async delete(id: string) {
     return this.repository.delete({ id });
   }

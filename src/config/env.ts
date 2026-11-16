@@ -1,4 +1,5 @@
 import "dotenv/config";
+import path from "node:path";
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -6,6 +7,11 @@ const envSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+
+  UPLOADS_DIR: z
+    .string()
+    .trim()
+    .default(path.resolve(process.cwd(), "uploads")),
 
   DB_HOST: z.string().trim().min(1, "DB_HOST is required"),
   DB_PORT: z.coerce.number().int().min(1).max(65535),
