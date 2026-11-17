@@ -81,9 +81,13 @@ export class ProductsController {
   ) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
-    await this.productsService.removeImage(params.id);
+    const product = await this.productsService.removeImage(params.id);
     return res
       .status(200)
-      .json({ success: true, message: "Product image removed successfully" });
+      .json({
+        success: true,
+        message: "Product image removed successfully",
+        data: product,
+      });
   };
 }
