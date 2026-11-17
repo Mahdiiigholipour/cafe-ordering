@@ -1,5 +1,8 @@
+import path from "node:path";
 import { CategoriesMessages } from "../../common/enums/messages/categories.messages";
 import { ConflictError, NotFoundError } from "../../common/errors";
+import { deleteUploadedFile } from "../../common/utils/file.util";
+import env from "../../config/env";
 import { CategoriesRepository } from "./categories.repository";
 import { CategoryEntity } from "./category.entity";
 import { CategoryResponse } from "./interfaces/category-response.interface";
@@ -60,6 +63,37 @@ export class CategoriesService {
       throw new ConflictError(CategoriesMessages.CATEGORY_HAS_PRODUCTS);
 
     await this.categoriesRepo.delete(id);
+  }
+
+  async updateImage(id: string, filePath: string) {
+    const category = await this.categoriesRepo.findById(id);
+    if (!category)
+      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+
+    const relativePath = path.relative(env.UPLOADS_DIR, filePath);
+    const oldImage = category.image;
+    const updated = await this.categoriesRepo.updateImage(
+      category,
+      relativePath,
+    );
+
+    if (oldImage) await deleteUploadedFile(oldImage);
+
+    return this.toCategoryResponse(updated);
+  }
+
+  async removeImage(id: string) {
+    const category = await this.categoriesRepo.findById(id);
+    if (!category)
+      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+
+    if (!category.image) return;
+
+    const oldImage = category.image;
+    const updated = await this.categoriesRepo.updateImage(category, null);
+    await deleteUploadedFile(oldImage);
+
+    return this.toCategoryResponse(updated);
   }
 
   // ----- Private helpers -----

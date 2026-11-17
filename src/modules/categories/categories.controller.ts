@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { CategoriesMessages } from "../../common/enums/messages/categories.messages";
+import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./schemas/create-category.schema";
@@ -9,25 +10,21 @@ import { UpdateCategoryDto } from "./schemas/update-category.schema";
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  getCategoriesList = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  getCategoriesList = async (req: Request, res: Response) => {
     const query: FilterCategoriesDto = res.locals.validatedQuery;
     const categories = await this.categoriesService.list(query.isActive);
 
     return res.status(200).json({ success: true, data: categories });
   };
 
-  getCategoryById = async (req: Request, res: Response, next: NextFunction) => {
+  getCategoryById = async (req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     const category = await this.categoriesService.getById(params.id);
 
     return res.status(200).json({ success: true, data: category });
   };
 
-  createCategory = async (req: Request, res: Response, next: NextFunction) => {
+  createCategory = async (req: Request, res: Response) => {
     const createDto: CreateCategoryDto = res.locals.validatedBody;
     const category = await this.categoriesService.create(createDto);
 
@@ -38,7 +35,7 @@ export class CategoriesController {
     });
   };
 
-  updateCategory = async (req: Request, res: Response, next: NextFunction) => {
+  updateCategory = async (req: Request, res: Response) => {
     const updateDto: UpdateCategoryDto = res.locals.validatedBody;
     const params: IdInParamsDto = res.locals.validatedParams;
     const category = await this.categoriesService.update(params.id, updateDto);
@@ -50,12 +47,45 @@ export class CategoriesController {
     });
   };
 
-  deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
+  deleteCategory = async (req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     await this.categoriesService.delete(params.id);
 
     return res
       .status(200)
       .json({ success: true, message: CategoriesMessages.CATEGORY_DELETED });
+  };
+
+  uploadCategoryImage = async (req: Request, res: Response) => {
+    const params: IdInParamsDto = res.locals.validatedParams;
+
+    if (!req.file) throw new BadRequestError("Please upload file.");
+
+    const category = await this.categoriesService.updateImage(
+      params.id,
+      req.file.path,
+    );
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Category image updated.",
+        data: category,
+      });
+  };
+
+  deleteCategoryImage = async (req: Request, res: Response) => {
+    const params: IdInParamsDto = res.locals.validatedParams;
+
+    const category = await this.categoriesService.removeImage(params.id);
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Category image removed successfully",
+        data: category,
+      });
   };
 }

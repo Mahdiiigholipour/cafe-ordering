@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+import { MulterError } from "multer";
 import { ZodError } from "zod";
 import env from "../../config/env";
+import { UploadsMessages } from "../enums/messages/uploads.messages";
 import {
   AppError,
   BadRequestError,
   ErrorCodes,
   HttpStatusCodes,
+  PayloadTooLargeError,
   ValidationError,
 } from "../errors";
 import { mapDatabaseError } from "../errors/database-error.mapper";
@@ -45,6 +48,14 @@ export function errorHandler(
   // Handle MySQL errors
   const databaseError = mapDatabaseError(err);
   if (databaseError) err = databaseError;
+
+  // Handle Multer errors
+  if (err instanceof MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE")
+      err = new PayloadTooLargeError(UploadsMessages.FILE_TOO_LARGE);
+
+    err = new BadRequestError(UploadsMessages.UPLOAD_FAILED);
+  }
 
   // Handle http errors
   if (err instanceof AppError && err.isOperational) {

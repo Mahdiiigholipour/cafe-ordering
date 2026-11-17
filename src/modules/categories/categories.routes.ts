@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { categoriesService } from ".";
 import { UserRoles } from "../../common/enums/user-roles.enum";
+import { createImageUpload } from "../../common/middlewares/upload.middleware";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { IdInParamsSchema } from "../../common/validations/id-in-params.schema";
 import { authorize } from "../auth/middlewares/authorize.middleware";
@@ -10,6 +11,7 @@ import { FilterCategoriesSchema } from "./schemas/filter-categories.schema";
 import { UpdateCategorySchema } from "./schemas/update-category.schema";
 
 const categoriesController = new CategoriesController(categoriesService);
+const upload = createImageUpload("categories");
 const router = Router();
 
 router.get(
@@ -43,5 +45,19 @@ router.delete(
   validate({ params: IdInParamsSchema }),
   categoriesController.deleteCategory,
 );
+
+router
+  .route("/:id/image")
+  .post(
+    validate({ params: IdInParamsSchema }),
+    authorize(),
+    upload.single("image"),
+    categoriesController.uploadCategoryImage,
+  )
+  .delete(
+    validate({ params: IdInParamsSchema }),
+    authorize(),
+    categoriesController.deleteCategoryImage,
+  );
 
 export default router;
