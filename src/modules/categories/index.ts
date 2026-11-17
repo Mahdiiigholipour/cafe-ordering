@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../database/data-source";
-import { ProductEntity } from "../products/entities/product.entity";
+import { ProductEntity } from "../products/product.entity";
 import { CategoriesRepository } from "./categories.repository";
 import { CategoriesService } from "./categories.service";
 import { CategoryEntity } from "./category.entity";

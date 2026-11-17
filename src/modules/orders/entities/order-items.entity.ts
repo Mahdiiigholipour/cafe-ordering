@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { AppBaseEntity } from "../../../common/entities/base.entity";
-import { ProductEntity } from "../../products/entities/product.entity";
 import { ProductOptionTypes } from "../../products/enums/product-option-type.enum";
+import { ProductEntity } from "../../products/product.entity";
 import { OrderEntity } from "./order.entity";
 
 interface SelectedOptions {
