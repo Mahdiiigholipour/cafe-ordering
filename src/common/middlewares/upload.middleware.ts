@@ -10,7 +10,7 @@ export const UPLOADS_DIR = env.UPLOADS_DIR;
 const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-type UploadModule = "categories" | "products";
+type UploadModule = "categories" | "products" | "settings";
 
 export function createImageUpload(module: UploadModule) {
   const destination = path.join(UPLOADS_DIR, module);
