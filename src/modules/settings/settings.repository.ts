@@ -6,7 +6,7 @@ export class SettingsRepository {
   constructor(private readonly repository: Repository<SettingEntity>) {}
 
   async find() {
-    return this.repository.findOne({});
+    return this.repository.findOne({ where: {} });
   }
 
   async update(settings: SettingEntity, data: UpdateSettingsDto) {
