@@ -7,6 +7,7 @@ const envSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+  FRONTEND_BASE_URL: z.string().url(),
 
   UPLOADS_DIR: z
     .string()
