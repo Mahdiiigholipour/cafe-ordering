@@ -30,4 +30,10 @@ router
     tablesController.updateTable,
   );
 
+router.get(
+  "/:id/qr",
+  validate({ params: IdInParamsSchema }),
+  tablesController.getQrImage,
+);
+
 export default router;

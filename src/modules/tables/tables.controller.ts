@@ -48,4 +48,18 @@ export class TablesController {
       data: table,
     });
   };
+
+  getQrImage = async (req: Request, res: Response, next: NextFunction) => {
+    const params: IdInParamsDto = res.locals.validatedParams;
+    const { qrBuffer, tableNumber } = await this.tablesService.getQrImage(
+      params.id,
+    );
+
+    res.set({
+      "Content-Type": "image/png",
+      "Content-Disposition": `attachment; filename="table-${tableNumber}.png"`,
+      "Cache-Control": "no-store",
+    });
+    return res.send(qrBuffer);
+  };
 }
