@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { SettingEntity } from "../../modules/setting/setting.entity";
+import { SettingEntity } from "../../modules/settings/setting.entity";
 
 export async function seedSetting(manager: EntityManager) {
   const settingRepository = manager.getRepository(SettingEntity);
