@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { productsService } from ".";
 import { UserRoles } from "../../common/enums/user-roles.enum";
+import { createImageUpload } from "../../common/middlewares/upload.middleware";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { IdInParamsSchema } from "../../common/validations/id-in-params.schema";
 import { authorize } from "../auth/middlewares/authorize.middleware";
@@ -10,6 +11,7 @@ import { FilterProductSchema } from "./schemas/filter-product.schema";
 import { UpdateProductSchema } from "./schemas/update-product.schema";
 
 const productsController = new ProductsController(productsService);
+const upload = createImageUpload("products");
 const router = Router();
 
 router
@@ -45,4 +47,19 @@ router.delete(
   validate({ params: IdInParamsSchema }),
   productsController.deleteProduct,
 );
+
+router
+  .route("/:id/image")
+  .post(
+    validate({ params: IdInParamsSchema }),
+    authorize(),
+    upload.single("image"),
+    productsController.updateProductImage,
+  )
+  .delete(
+    validate({ params: IdInParamsSchema }),
+    authorize(),
+    productsController.deleteProductImage,
+  );
+
 export default router;

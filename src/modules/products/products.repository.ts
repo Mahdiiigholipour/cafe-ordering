@@ -63,4 +63,9 @@ export class ProductsRepository {
   async delete(id: string) {
     // Will be complete after orders module developed
   }
+
+  async updateImage(product: ProductEntity, image: string | null) {
+    product.image = image;
+    return this.repository.save(product);
+  }
 }

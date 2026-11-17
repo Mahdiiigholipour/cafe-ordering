@@ -53,4 +53,37 @@ export class ProductsController {
   deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
     throw new BadRequestError("Delete products not available");
   };
+
+  updateProductImage = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const params: IdInParamsDto = res.locals.validatedParams;
+    if (!req.file) throw new BadRequestError("Please upload file");
+
+    const product = await this.productsService.updateImage(
+      params.id,
+      req.file.path,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Product image updated successfully",
+      data: product,
+    });
+  };
+
+  deleteProductImage = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const params: IdInParamsDto = res.locals.validatedParams;
+
+    await this.productsService.removeImage(params.id);
+    return res
+      .status(200)
+      .json({ success: true, message: "Product image removed successfully" });
+  };
 }

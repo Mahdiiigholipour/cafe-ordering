@@ -1,4 +1,7 @@
+import path from "node:path";
 import { ConflictError, NotFoundError } from "../../common/errors";
+import { deleteUploadedFile } from "../../common/utils/file.util";
+import env from "../../config/env";
 import { CategoriesService } from "../categories/categories.service";
 import { ProductEntity } from "./entities/product.entity";
 import { ProductResponse } from "./interfaces/product-response.interface";
@@ -58,6 +61,30 @@ export class ProductsService {
 
   async delete(id: string) {
     // Will be complete after orders module developed
+  }
+
+  async updateImage(id: string, filePath: string) {
+    const product = await this.productsRepo.findById(id);
+    if (!product) throw new NotFoundError("Product not found");
+
+    const relativePath = path.relative(env.UPLOADS_DIR, filePath);
+    const oldImage = product.image;
+    const updated = await this.productsRepo.updateImage(product, relativePath);
+
+    if (oldImage) await deleteUploadedFile(oldImage);
+
+    return this.toProductResponse(product);
+  }
+
+  async removeImage(id: string) {
+    const product = await this.productsRepo.findById(id);
+    if (!product) throw new NotFoundError("Product not found");
+
+    const oldImage = product.image;
+    const updated = await this.productsRepo.updateImage(product, null);
+    if (oldImage) await deleteUploadedFile(oldImage);
+
+    return this.toProductResponse(updated);
   }
 
   //---- Private handlers
