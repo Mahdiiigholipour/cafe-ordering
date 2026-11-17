@@ -1,6 +1,6 @@
 import { FindOptionsWhere, Repository } from "typeorm";
 import { TableEntity } from "./table.entity";
-import { ListTablesQueryDto, UpdateTableDto } from "./validation.schemas";
+import { ListTablesQueryDto, UpdateTableDto } from "./tables.schema";
 
 export class TablesRepository {
   constructor(private readonly repository: Repository<TableEntity>) {}

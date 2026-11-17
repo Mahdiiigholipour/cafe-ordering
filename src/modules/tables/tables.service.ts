@@ -8,7 +8,7 @@ import {
   CreateTableDto,
   ListTablesQueryDto,
   UpdateTableDto,
-} from "./validation.schemas";
+} from "./tables.schema";
 
 export class TablesService {
   constructor(private readonly tablesRepo: TablesRepository) {}
