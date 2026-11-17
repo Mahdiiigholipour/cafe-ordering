@@ -1,4 +1,7 @@
+import path from "node:path";
 import { ConflictError, InternalServerError } from "../../common/errors";
+import { deleteUploadedFile } from "../../common/utils/file.util";
+import env from "../../config/env";
 import { SettingsResponse } from "./interfaces/settings-response.interface";
 import { SettingEntity } from "./setting.entity";
 import { SettingsMessages } from "./settings.messages";
@@ -25,6 +28,29 @@ export class SettingsService {
       throw new ConflictError(SettingsMessages.SAME_OPENING_AND_CLOSING_TIME);
 
     const updated = await this.settingsRepo.update(settings, dto);
+    return this.toSettingsResponse(updated);
+  }
+
+  async setLogo(filePath: string) {
+    const relativePath = path.relative(env.UPLOADS_DIR, filePath);
+    const settings = await this.getEntityOrThrow();
+    const oldLogo = settings.logo;
+    const updated = await this.settingsRepo.update(settings, {
+      logo: relativePath,
+    });
+
+    if (oldLogo) await deleteUploadedFile(oldLogo);
+
+    return this.toSettingsResponse(updated);
+  }
+
+  async removeLogo() {
+    const settings = await this.getEntityOrThrow();
+    const oldLogo = settings.logo;
+    const updated = await this.settingsRepo.update(settings, { logo: null });
+
+    if (oldLogo) await deleteUploadedFile(oldLogo);
+
     return this.toSettingsResponse(updated);
   }
 
