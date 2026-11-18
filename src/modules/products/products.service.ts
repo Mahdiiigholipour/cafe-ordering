@@ -23,9 +23,7 @@ export class ProductsService {
   }
 
   async getById(id: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
-
+    const product = await this.getEntityOrThrow(id);
     return this.toResponse(product);
   }
 
@@ -34,7 +32,7 @@ export class ProductsService {
     if (existsProduct)
       throw new ConflictError(ProductsMessages.PRODUCT_ALREADY_EXISTS);
 
-    const category = await this.categoriesService.getById(data.categoryId);
+    await this.categoriesService.getById(data.categoryId);
 
     const created = await this.productsRepo.create(data);
     const product = await this.productsRepo.findById(created.id);
@@ -42,8 +40,7 @@ export class ProductsService {
   }
 
   async update(id: string, data: UpdateProductDto) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+    const product = await this.getEntityOrThrow(id);
 
     if (data.categoryId !== undefined)
       await this.categoriesService.getById(data.categoryId);
@@ -67,8 +64,7 @@ export class ProductsService {
   }
 
   async updateImage(id: string, filePath: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+    const product = await this.getEntityOrThrow(id);
 
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
     const oldImage = product.image;
@@ -76,12 +72,11 @@ export class ProductsService {
 
     if (oldImage) await deleteUploadedFile(oldImage);
 
-    return this.toResponse(product);
+    return this.toResponse(updated);
   }
 
   async removeImage(id: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+    const product = await this.getEntityOrThrow(id);
 
     const oldImage = product.image;
     const updated = await this.productsRepo.updateImage(product, null);
@@ -90,7 +85,6 @@ export class ProductsService {
     return this.toResponse(updated);
   }
 
-  //---- Private handlers
   private toResponse(product: ProductEntity): ProductsResponse {
     return {
       id: product.id,
@@ -106,5 +100,12 @@ export class ProductsService {
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
     };
+  }
+
+  private async getEntityOrThrow(id: string) {
+    const entity = await this.productsRepo.findById(id);
+    if (!entity) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+
+    return entity;
   }
 }
