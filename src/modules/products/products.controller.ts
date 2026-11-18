@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { ProductsService } from "./products.service";
@@ -60,7 +61,7 @@ export class ProductsController {
     next: NextFunction,
   ) => {
     const params: IdInParamsDto = res.locals.validatedParams;
-    if (!req.file) throw new BadRequestError("Please upload file");
+    if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
     const product = await this.productsService.updateImage(
       params.id,
@@ -82,12 +83,10 @@ export class ProductsController {
     const params: IdInParamsDto = res.locals.validatedParams;
 
     const product = await this.productsService.removeImage(params.id);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Product image removed successfully",
-        data: product,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Product image removed successfully",
+      data: product,
+    });
   };
 }

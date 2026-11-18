@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { CategoriesMessages } from "./categories.messages";
@@ -59,7 +60,7 @@ export class CategoriesController {
   uploadCategoryImage = async (req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
-    if (!req.file) throw new BadRequestError("Please upload file.");
+    if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
     const category = await this.categoriesService.updateImage(
       params.id,
