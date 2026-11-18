@@ -46,8 +46,8 @@ export class CategoriesRepository {
     return this.repository.save(category);
   }
 
-  async delete(id: string) {
-    return this.repository.delete({ id });
+  async delete(category: CategoryEntity) {
+    return this.repository.remove(category);
   }
 
   async countProductsByCategoryId(categoryId: string) {

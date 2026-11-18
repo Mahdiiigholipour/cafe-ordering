@@ -54,7 +54,7 @@ export class CategoriesService {
     if (productsCount > 0)
       throw new ConflictError(CategoriesMessages.CATEGORY_HAS_PRODUCTS);
 
-    await this.repository.delete(id);
+    await this.repository.delete(category);
   }
 
   public async updateImage(id: string, filePath: string) {
