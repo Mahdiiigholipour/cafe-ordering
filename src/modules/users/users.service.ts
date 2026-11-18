@@ -1,4 +1,3 @@
-import { UsersMessages } from "../../common/enums/messages/users.messages";
 import { UserRoles } from "../../common/enums/user-roles.enum";
 import { ConflictError, NotFoundError } from "../../common/errors";
 import { hashPassword } from "../../common/utils/password.util";
@@ -7,6 +6,7 @@ import { CreateUserDto } from "./schemas/create-user.schema";
 import { ResetPasswordDto } from "./schemas/reset-password.schema";
 import { UpdateUserDto } from "./schemas/update-user.schema";
 import { UsersResponse } from "./types/users-response.interface";
+import { UsersMessages } from "./users.messages";
 import { UsersRepository } from "./users.repository";
 
 export class UsersService {

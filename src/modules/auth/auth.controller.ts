@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UnauthorizedError } from "../../common/errors";
+import { AuthMessages } from "./auth.messages";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./schemas/login.schema";
 
@@ -15,7 +16,8 @@ export class AuthController {
 
   getMe = async (req: Request, res: Response, next: NextFunction) => {
     const { user } = req;
-    if (!user) throw new UnauthorizedError("Authentication required.");
+    if (!user)
+      throw new UnauthorizedError(AuthMessages.AUTHENTICATION_REQUIRED);
     return res.status(200).json({ success: true, data: user });
   };
 }

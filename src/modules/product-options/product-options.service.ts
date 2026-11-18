@@ -1,10 +1,10 @@
+import { ProductOptionTypes } from "../../common/enums/product-option-type.enum";
 import {
   BadRequestError,
   ConflictError,
   NotFoundError,
 } from "../../common/errors";
 import { ProductsService } from "../products/products.service";
-import { ProductOptionTypes } from "./enums/product-option-type.enum";
 import { ProductOptionEntity } from "./product-option.entity";
 import { ProductOptionsMessages } from "./product-options.messages";
 import { ProductOptionsRepository } from "./product-options.repository";
@@ -64,7 +64,7 @@ export class ProductOptionsService {
       dto.priceDelta !== 0
     )
       throw new BadRequestError(
-        ProductOptionsMessages.REMOVAL_OPTION_PRICE_INVALID,
+        ProductOptionsMessages.REMOVAL_OPTION_PRICE_NOT_ALLOWED,
       );
 
     if (dto.name !== undefined) {

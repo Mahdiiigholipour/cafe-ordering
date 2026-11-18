@@ -4,6 +4,7 @@ import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
 import { CategoriesService } from "../categories/categories.service";
 import { ProductEntity } from "./product.entity";
+import { ProductsMessages } from "./products.messages";
 import { ProductsRepository } from "./products.repository";
 import { CreateProductDto } from "./schemas/create-product.schema";
 import { FilterProductDto } from "./schemas/filter-product.schema";
@@ -23,14 +24,15 @@ export class ProductsService {
 
   async getById(id: string) {
     const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError("Product not found.");
+    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
 
     return this.toResponse(product);
   }
 
   async create(data: CreateProductDto) {
     const existsProduct = await this.productsRepo.findByName(data.name);
-    if (existsProduct) throw new ConflictError("This product already exist");
+    if (existsProduct)
+      throw new ConflictError(ProductsMessages.PRODUCT_ALREADY_EXISTS);
 
     const category = await this.categoriesService.getById(data.categoryId);
 
@@ -41,7 +43,7 @@ export class ProductsService {
 
   async update(id: string, data: UpdateProductDto) {
     const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError("Product not found");
+    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
 
     if (data.categoryId !== undefined)
       await this.categoriesService.getById(data.categoryId);
@@ -51,7 +53,8 @@ export class ProductsService {
       data.name.toLowerCase() !== product.name.toLowerCase()
     ) {
       const existsProduct = await this.productsRepo.findByName(data.name);
-      if (existsProduct) throw new ConflictError("This product already exist");
+      if (existsProduct)
+        throw new ConflictError(ProductsMessages.PRODUCT_ALREADY_EXISTS);
     }
 
     await this.productsRepo.update(product, data);
@@ -65,7 +68,7 @@ export class ProductsService {
 
   async updateImage(id: string, filePath: string) {
     const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError("Product not found");
+    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
 
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
     const oldImage = product.image;
@@ -78,7 +81,7 @@ export class ProductsService {
 
   async removeImage(id: string) {
     const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError("Product not found");
+    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
 
     const oldImage = product.image;
     const updated = await this.productsRepo.updateImage(product, null);

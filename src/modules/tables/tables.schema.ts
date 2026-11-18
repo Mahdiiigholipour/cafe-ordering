@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ValidationMessages } from "../../common/constants/validation.messages";
 
 const TableNumberSchema = z.number().int().min(1).max(999);
 
@@ -15,7 +16,7 @@ export const UpdateTableSchema = z
   })
   .strict()
   .refine((data) => Object.keys(data).length > 0, {
-    message: "At least one field is required",
+    message: ValidationMessages.AT_LEAST_ONE_FIELD,
   });
 
 export const ListTablesQuerySchema = z

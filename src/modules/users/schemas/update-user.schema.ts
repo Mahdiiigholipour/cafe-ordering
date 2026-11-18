@@ -1,6 +1,6 @@
 import z from "zod";
-import { UsersMessages } from "../../../common/enums/messages/users.messages";
 import { UserRoles } from "../../../common/enums/user-roles.enum";
+import { UsersMessages } from "../users.messages";
 
 export const UpdateUserSchema = z
   .object({

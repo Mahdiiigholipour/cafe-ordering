@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { CategoriesMessages } from "../../common/enums/messages/categories.messages";
+import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
+import { CategoriesMessages } from "./categories.messages";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./schemas/create-category.schema";
 import { FilterCategoriesDto } from "./schemas/filter-categories.schema";
@@ -59,20 +60,18 @@ export class CategoriesController {
   uploadCategoryImage = async (req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
-    if (!req.file) throw new BadRequestError("Please upload file.");
+    if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
     const category = await this.categoriesService.updateImage(
       params.id,
       req.file.path,
     );
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Category image updated.",
-        data: category,
-      });
+    return res.status(200).json({
+      success: true,
+      message: CategoriesMessages.IMAGE_UPDATED,
+      data: category,
+    });
   };
 
   deleteCategoryImage = async (req: Request, res: Response) => {
@@ -80,12 +79,10 @@ export class CategoriesController {
 
     const category = await this.categoriesService.removeImage(params.id);
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Category image removed successfully",
-        data: category,
-      });
+    return res.status(200).json({
+      success: true,
+      message: CategoriesMessages.IMAGE_REMOVED,
+      data: category,
+    });
   };
 }

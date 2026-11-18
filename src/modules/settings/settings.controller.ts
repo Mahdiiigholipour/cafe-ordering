@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { SettingsMessages } from "./settings.messages";
 import { UpdateSettingsDto } from "./settings.schema";
@@ -24,7 +25,7 @@ export class SettingsController {
   };
 
   setLogo = async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.file) throw new BadRequestError("Upload file");
+    if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
     const settings = await this.settingsService.setLogo(req.file.path);
     return res.status(200).json({
@@ -36,12 +37,10 @@ export class SettingsController {
 
   removeLogo = async (req: Request, res: Response, next: NextFunction) => {
     const settings = await this.settingsService.removeLogo();
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: SettingsMessages.SETTINGS_UPDATED,
-        data: settings,
-      });
+    return res.status(200).json({
+      success: true,
+      message: SettingsMessages.SETTINGS_UPDATED,
+      data: settings,
+    });
   };
 }

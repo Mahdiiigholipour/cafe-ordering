@@ -1,6 +1,6 @@
 import z from "zod";
-import { UsersMessages } from "../../../common/enums/messages/users.messages";
 import { isValidBcryptPassword } from "../../../common/utils/password.util";
+import { UsersMessages } from "../users.messages";
 
 export const PasswordSchema = z
   .string()

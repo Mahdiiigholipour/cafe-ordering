@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { MulterError } from "multer";
 import { ZodError } from "zod";
 import env from "../../config/env";
-import { UploadsMessages } from "../enums/messages/uploads.messages";
+import { UploadsMessages } from "../constants/uploads.messages";
 import {
   AppError,
   BadRequestError,
@@ -52,7 +52,7 @@ export function errorHandler(
   // Handle Multer errors
   if (err instanceof MulterError) {
     if (err.code === "LIMIT_FILE_SIZE")
-      err = new PayloadTooLargeError(UploadsMessages.FILE_TOO_LARGE);
+      err = new PayloadTooLargeError(UploadsMessages.FILE_SIZE_EXCEEDED);
 
     err = new BadRequestError(UploadsMessages.UPLOAD_FAILED);
   }
