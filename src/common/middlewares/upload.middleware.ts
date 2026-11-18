@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import env from "../../config/env";
-import { UploadsMessages } from "../enums/messages/uploads.messages";
+import { UploadsMessages } from "../constants/uploads.messages";
 import { UnsupportedMediaTypeError } from "../errors";
 
 export const UPLOADS_DIR = env.UPLOADS_DIR;

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { MulterError } from "multer";
 import { ZodError } from "zod";
 import env from "../../config/env";
-import { UploadsMessages } from "../enums/messages/uploads.messages";
+import { UploadsMessages } from "../constants/uploads.messages";
 import {
   AppError,
   BadRequestError,
