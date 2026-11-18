@@ -46,8 +46,6 @@ export class ProductOptionsService {
         ProductOptionsMessages.PRODUCT_OPTION_ALREADY_EXISTS,
       );
 
-    if (dto.type === ProductOptionTypes.Removal) dto.priceDelta = 0;
-
     const created = await this.repository.create({ ...dto, productId });
     return this.toResponse(created);
   }
