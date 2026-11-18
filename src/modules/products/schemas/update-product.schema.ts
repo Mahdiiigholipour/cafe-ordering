@@ -1,4 +1,5 @@
 import z from "zod";
+import { ValidationMessages } from "../../../common/constants/validation.messages";
 
 export const UpdateProductSchema = z
   .object({
@@ -9,6 +10,9 @@ export const UpdateProductSchema = z
     isActive: z.boolean().optional(),
   })
   .strict()
-  .refine((data) => Object.keys(data).length > 0);
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    ValidationMessages.AT_LEAST_ONE_FIELD,
+  );
 
 export type UpdateProductDto = z.output<typeof UpdateProductSchema>;

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
+import { ProductsMessages } from "./products.messages";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./schemas/create-product.schema";
 import { FilterProductDto } from "./schemas/filter-product.schema";
@@ -25,7 +26,7 @@ export class ProductsController {
 
     return res.status(201).json({
       success: true,
-      message: "Product created successfully",
+      message: ProductsMessages.PRODUCT_CREATED,
       data: product,
     });
   };
@@ -46,13 +47,13 @@ export class ProductsController {
 
     return res.status(200).json({
       success: true,
-      message: "Product updated successfully",
+      message: ProductsMessages.PRODUCT_UPDATED,
       data: product,
     });
   };
 
   deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
-    throw new BadRequestError("Delete products not available");
+    throw new BadRequestError(ProductsMessages.PRODUCT_DELETED);
   };
 
   updateProductImage = async (
@@ -70,7 +71,7 @@ export class ProductsController {
 
     return res.status(200).json({
       success: true,
-      message: "Product image updated successfully",
+      message: ProductsMessages.PRODUCT_IMAGE_UPDATED,
       data: product,
     });
   };
@@ -85,7 +86,7 @@ export class ProductsController {
     const product = await this.productsService.removeImage(params.id);
     return res.status(200).json({
       success: true,
-      message: "Product image removed successfully",
+      message: ProductsMessages.PRODUCT_IMAGE_REMOVED,
       data: product,
     });
   };
