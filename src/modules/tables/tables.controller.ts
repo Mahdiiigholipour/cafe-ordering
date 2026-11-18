@@ -14,7 +14,7 @@ export class TablesController {
   getTablesList = async (_req: Request, res: Response) => {
     const query: ListTablesQueryDto = res.locals.validatedQuery;
 
-    const tables = await this.tablesService.getAll(query);
+    const tables = await this.tablesService.list(query);
 
     return res.status(200).json({ success: true, data: tables });
   };

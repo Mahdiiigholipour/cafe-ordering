@@ -14,7 +14,7 @@ export class CategoriesService {
 
   public async list(isActive?: boolean) {
     const categories = await this.repository.findAll({ isActive });
-    return categories.map(this.toResponse);
+    return categories.map((category) => this.toResponse(category));
   }
 
   public async getById(id: string) {

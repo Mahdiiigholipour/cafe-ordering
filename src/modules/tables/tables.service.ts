@@ -15,18 +15,18 @@ import { TablesResponse } from "./types/tables-response.interface";
 export class TablesService {
   constructor(private readonly tablesRepo: TablesRepository) {}
 
-  async getAll(filters: ListTablesQueryDto) {
+  public async list(filters: ListTablesQueryDto) {
     const tables = await this.tablesRepo.findAll(filters);
     return tables.map((table) => this.toResponse(table));
   }
 
-  async getById(id: string) {
+  public async getById(id: string) {
     const table = await this.getEntityOrThrow(id);
 
     return this.toResponse(table);
   }
 
-  async create(dto: CreateTableDto) {
+  public async create(dto: CreateTableDto) {
     const existsTable = await this.tablesRepo.findByNumber(dto.number);
     if (existsTable)
       throw new ConflictError(TablesMessages.TABLE_NUMBER_CONFLICT);
@@ -38,7 +38,7 @@ export class TablesService {
     return this.toResponse(table);
   }
 
-  async update(id: string, dto: UpdateTableDto) {
+  public async update(id: string, dto: UpdateTableDto) {
     const table = await this.getEntityOrThrow(id);
 
     if (dto.number !== undefined && dto.number !== table.number) {
@@ -51,7 +51,7 @@ export class TablesService {
     return this.toResponse(updated);
   }
 
-  async getQrImage(id: string) {
+  public async getQrImage(id: string) {
     const table = await this.getEntityOrThrow(id);
     const url = new URL("/menu", env.FRONTEND_BASE_URL);
     url.searchParams.set("table", table.qrToken);
@@ -66,7 +66,6 @@ export class TablesService {
     return { qrBuffer, tableNumber: table.number };
   }
 
-  //---- Private helpers -----
   private toResponse(table: TableEntity): TablesResponse {
     return {
       id: table.id,

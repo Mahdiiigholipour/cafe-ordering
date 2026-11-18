@@ -12,22 +12,20 @@ import { UsersRepository } from "./users.repository";
 export class UsersService {
   constructor(private readonly usersRepo: UsersRepository) {}
 
-  //------ Public helpers ------
-  async findByUsername(username: string): Promise<UserEntity | null> {
+  public async findByUsername(username: string): Promise<UserEntity | null> {
     return this.usersRepo.findByUsername(username);
   }
 
-  async findById(id: string): Promise<UserEntity | null> {
+  public async findById(id: string): Promise<UserEntity | null> {
     return this.usersRepo.findById(id);
   }
 
-  //------ Users' controller methods -------
-  async list() {
+  public async list() {
     const users = await this.usersRepo.findAll();
-    return users.map(this.toResponse);
+    return users.map((user) => this.toResponse(user));
   }
 
-  async create(data: CreateUserDto) {
+  public async create(data: CreateUserDto) {
     let existUser = await this.findByUsername(data.username);
     if (existUser)
       throw new ConflictError(UsersMessages.USERNAME_ALREADY_EXISTS);
@@ -43,12 +41,16 @@ export class UsersService {
     return this.toResponse(user);
   }
 
-  async getById(id: string) {
+  public async getById(id: string) {
     const user = await this.getEntityOrThrow(id);
     return this.toResponse(user);
   }
 
-  async update(actingUserId: string, targetId: string, data: UpdateUserDto) {
+  public async update(
+    actingUserId: string,
+    targetId: string,
+    data: UpdateUserDto,
+  ) {
     const targetUser = await this.getEntityOrThrow(targetId);
     const isDeactivating = targetUser.isActive && data.isActive === false;
     const isDemoting =
@@ -72,11 +74,11 @@ export class UsersService {
     return this.toResponse(updated);
   }
 
-  async countActiveAdmins() {
+  public async countActiveAdmins() {
     return this.usersRepo.findActiveAdmins();
   }
 
-  async resetPassword(targetId: string, data: ResetPasswordDto) {
+  public async resetPassword(targetId: string, data: ResetPasswordDto) {
     const user = await this.getEntityOrThrow(targetId);
     const hashed = await hashPassword(data.password);
 

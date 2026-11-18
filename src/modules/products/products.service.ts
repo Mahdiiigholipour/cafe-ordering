@@ -17,17 +17,17 @@ export class ProductsService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async list(filters?: FilterProductDto) {
+  public async list(filters?: FilterProductDto) {
     const products = await this.productsRepo.findAll(filters);
-    return products.map(this.toResponse);
+    return products.map((product) => this.toResponse(product));
   }
 
-  async getById(id: string) {
+  public async getById(id: string) {
     const product = await this.getEntityOrThrow(id);
     return this.toResponse(product);
   }
 
-  async create(data: CreateProductDto) {
+  public async create(data: CreateProductDto) {
     const existsProduct = await this.productsRepo.findByName(data.name);
     if (existsProduct)
       throw new ConflictError(ProductsMessages.PRODUCT_ALREADY_EXISTS);
@@ -39,7 +39,7 @@ export class ProductsService {
     return this.toResponse(product!);
   }
 
-  async update(id: string, data: UpdateProductDto) {
+  public async update(id: string, data: UpdateProductDto) {
     const product = await this.getEntityOrThrow(id);
 
     if (data.categoryId !== undefined)
@@ -59,11 +59,11 @@ export class ProductsService {
     return this.toResponse(refreshed!);
   }
 
-  async delete(id: string) {
+  public async delete(id: string) {
     // Will be complete after orders module developed
   }
 
-  async updateImage(id: string, filePath: string) {
+  public async updateImage(id: string, filePath: string) {
     const product = await this.getEntityOrThrow(id);
 
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
@@ -75,7 +75,7 @@ export class ProductsService {
     return this.toResponse(updated);
   }
 
-  async removeImage(id: string) {
+  public async removeImage(id: string) {
     const product = await this.getEntityOrThrow(id);
 
     const oldImage = product.image;
