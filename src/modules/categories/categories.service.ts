@@ -10,93 +10,76 @@ import { UpdateCategoryDto } from "./schemas/update-category.schema";
 import { CategoriesResponse } from "./types/category-response.interface";
 
 export class CategoriesService {
-  constructor(private readonly categoriesRepo: CategoriesRepository) {}
+  constructor(private readonly repository: CategoriesRepository) {}
 
-  async list(isActive?: boolean) {
-    const categories = await this.categoriesRepo.findAll({ isActive });
+  public async list(isActive?: boolean) {
+    const categories = await this.repository.findAll({ isActive });
     return categories.map(this.toResponse);
   }
 
-  async getById(id: string) {
-    const category = await this.categoriesRepo.findById(id);
-    if (!category)
-      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
-
+  public async getById(id: string) {
+    const category = await this.getEntityOrThrow(id);
     return this.toResponse(category);
   }
 
-  async create(dto: CreateCategoryDto) {
-    const existCategory = await this.categoriesRepo.findByName(dto.name);
+  public async create(dto: CreateCategoryDto) {
+    const existCategory = await this.repository.findByName(dto.name);
     if (existCategory)
       throw new ConflictError(CategoriesMessages.CATEGORY_ALREADY_EXISTS);
 
-    const created = await this.categoriesRepo.create(dto);
+    const created = await this.repository.create(dto);
     return this.toResponse(created);
   }
 
-  async update(id: string, dto: UpdateCategoryDto) {
-    const category = await this.categoriesRepo.findById(id);
-    if (!category)
-      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+  public async update(id: string, dto: UpdateCategoryDto) {
+    const category = await this.getEntityOrThrow(id);
 
     if (
       dto.name !== undefined &&
       dto.name.toLowerCase() !== category.name.toLowerCase()
     ) {
-      const existCategory = await this.categoriesRepo.findByName(dto.name);
+      const existCategory = await this.repository.findByName(dto.name);
       if (existCategory)
         throw new ConflictError(CategoriesMessages.CATEGORY_ALREADY_EXISTS);
     }
 
-    const updated = await this.categoriesRepo.update(category, dto);
+    const updated = await this.repository.update(category, dto);
     return this.toResponse(updated);
   }
 
-  async delete(id: string) {
-    const category = await this.categoriesRepo.findById(id);
-    if (!category)
-      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+  public async delete(id: string) {
+    const category = await this.getEntityOrThrow(id);
 
-    const productsCount =
-      await this.categoriesRepo.countProductsByCategoryId(id);
+    const productsCount = await this.repository.countProductsByCategoryId(id);
     if (productsCount > 0)
       throw new ConflictError(CategoriesMessages.CATEGORY_HAS_PRODUCTS);
 
-    await this.categoriesRepo.delete(id);
+    await this.repository.delete(id);
   }
 
-  async updateImage(id: string, filePath: string) {
-    const category = await this.categoriesRepo.findById(id);
-    if (!category)
-      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+  public async updateImage(id: string, filePath: string) {
+    const category = await this.getEntityOrThrow(id);
 
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
     const oldImage = category.image;
-    const updated = await this.categoriesRepo.updateImage(
-      category,
-      relativePath,
-    );
+    const updated = await this.repository.updateImage(category, relativePath);
 
     if (oldImage) await deleteUploadedFile(oldImage);
 
     return this.toResponse(updated);
   }
 
-  async removeImage(id: string) {
-    const category = await this.categoriesRepo.findById(id);
-    if (!category)
-      throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+  public async removeImage(id: string) {
+    const category = await this.getEntityOrThrow(id);
 
     if (!category.image) return;
 
     const oldImage = category.image;
-    const updated = await this.categoriesRepo.updateImage(category, null);
+    const updated = await this.repository.updateImage(category, null);
     await deleteUploadedFile(oldImage);
 
     return this.toResponse(updated);
   }
-
-  // ----- Private helpers -----
 
   private toResponse(category: CategoryEntity): CategoriesResponse {
     return {
@@ -108,5 +91,12 @@ export class CategoriesService {
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,
     };
+  }
+
+  private async getEntityOrThrow(id: string) {
+    const entity = await this.repository.findById(id);
+    if (!entity) throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
+
+    return entity;
   }
 }
