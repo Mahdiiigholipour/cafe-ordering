@@ -3,7 +3,7 @@ import { ConflictError, InternalServerError } from "../../common/errors";
 import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
 import { SettingsResponse } from "./interfaces/settings-response.interface";
-import { SettingEntity } from "./setting.entity";
+import { SettingsEntity } from "./settings.entity";
 import { SettingsMessages } from "./settings.messages";
 import { SettingsRepository } from "./settings.repository";
 import { UpdateSettingsDto } from "./settings.schema";
@@ -55,7 +55,7 @@ export class SettingsService {
   }
 
   //----- Private helpers
-  private toSettingsResponse(settings: SettingEntity): SettingsResponse {
+  private toSettingsResponse(settings: SettingsEntity): SettingsResponse {
     return {
       cafeName: settings.cafeName,
       logo: settings.logo,
