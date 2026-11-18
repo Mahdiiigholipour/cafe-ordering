@@ -1,8 +1,8 @@
 import path from "node:path";
-import { CategoriesMessages } from "../../common/enums/messages/categories.messages";
 import { ConflictError, NotFoundError } from "../../common/errors";
 import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
+import { CategoriesMessages } from "./categories.messages";
 import { CategoriesRepository } from "./categories.repository";
 import { CategoryEntity } from "./category.entity";
 import { CreateCategoryDto } from "./schemas/create-category.schema";

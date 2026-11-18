@@ -1,5 +1,5 @@
 import z from "zod";
-import { CategoriesMessages } from "../../../common/enums/messages/categories.messages";
+import { ValidationMessages } from "../../../common/constants/validation.messages";
 
 export const UpdateCategorySchema = z
   .object({
@@ -10,7 +10,7 @@ export const UpdateCategorySchema = z
   .strict()
   .refine(
     (data) => Object.keys(data).length > 0,
-    CategoriesMessages.AT_LEAST_ONE_FIELD,
+    ValidationMessages.AT_LEAST_ONE_FIELD,
   );
 
 export type UpdateCategoryDto = z.output<typeof UpdateCategorySchema>;
