@@ -4,7 +4,7 @@ import { ProductOptionEntity } from "./product-option.entity";
 import {
   CreateProductOptionsData,
   UpdateProductOptionsData,
-} from "./types/repository.types";
+} from "./types/product-options-repository.types";
 
 export class ProductOptionsRepository {
   constructor(private readonly repository: Repository<ProductOptionEntity>) {}

@@ -5,7 +5,7 @@ export const CreateProductSchema = z
     name: z.string().trim().min(2).max(100),
     price: z.number().int().positive(),
     categoryId: z.string().uuid(),
-    description: z.string().trim().max(500).nullable().optional(),
+    description: z.string().trim().max(500).nullable().default(null),
   })
   .strict();
 

@@ -1,8 +1,10 @@
 import { FindOptionsWhere, Repository } from "typeorm";
 import { ProductEntity } from "../products/product.entity";
 import { CategoryEntity } from "./category.entity";
-import { CreateCategoryDto } from "./schemas/create-category.schema";
-import { UpdateCategoryDto } from "./schemas/update-category.schema";
+import {
+  CreateCategoryDataType,
+  UpdateCategoryDataType,
+} from "./types/category-repository.types";
 
 export class CategoriesRepository {
   constructor(
@@ -26,12 +28,12 @@ export class CategoriesRepository {
     return this.repository.find({ where });
   }
 
-  async create(data: CreateCategoryDto) {
+  async create(data: CreateCategoryDataType) {
     const category = this.repository.create(data);
     return this.repository.save(category);
   }
 
-  async update(category: CategoryEntity, data: UpdateCategoryDto) {
+  async update(category: CategoryEntity, data: UpdateCategoryDataType) {
     if (data.description !== undefined) category.description = data.description;
     if (data.name !== undefined) category.name = data.name;
     if (data.isActive !== undefined) category.isActive = data.isActive;

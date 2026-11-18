@@ -1,8 +1,10 @@
 import { FindOptionsWhere, Like, Repository } from "typeorm";
 import { ProductEntity } from "./product.entity";
-import { CreateProductDto } from "./schemas/create-product.schema";
-import { FilterProductDto } from "./schemas/filter-product.schema";
-import { UpdateProductDto } from "./schemas/update-product.schema";
+import {
+  CreateProductDataType,
+  FilterProductDataType,
+  UpdateProductDataType,
+} from "./types/product-repository.types";
 
 export class ProductsRepository {
   constructor(private readonly repository: Repository<ProductEntity>) {}
@@ -21,7 +23,7 @@ export class ProductsRepository {
     });
   }
 
-  async findAll(filters?: FilterProductDto) {
+  async findAll(filters?: FilterProductDataType) {
     const baseWhere: FindOptionsWhere<ProductEntity> = {};
     if (filters?.categoryId !== undefined)
       baseWhere.categoryId = filters.categoryId;
@@ -45,12 +47,12 @@ export class ProductsRepository {
     });
   }
 
-  async create(data: CreateProductDto) {
+  async create(data: CreateProductDataType) {
     const product = this.repository.create(data);
     return this.repository.save(product);
   }
 
-  async update(product: ProductEntity, data: UpdateProductDto) {
+  async update(product: ProductEntity, data: UpdateProductDataType) {
     if (data.categoryId !== undefined) product.categoryId = data.categoryId;
     if (data.name !== undefined) product.name = data.name;
     if (data.description !== undefined) product.description = data.description;

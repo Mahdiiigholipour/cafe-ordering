@@ -1,17 +1,6 @@
 import { Repository } from "typeorm";
 import { SettingsEntity } from "./settings.entity";
-
-type SettingsUpdateData = Partial<
-  Pick<
-    SettingsEntity,
-    | "cafeName"
-    | "openingTime"
-    | "closingTime"
-    | "taxPercent"
-    | "servicePercent"
-    | "logo"
-  >
->;
+import { UpdateSettingsDataType } from "./types/settings-repository.types";
 
 export class SettingsRepository {
   constructor(private readonly repository: Repository<SettingsEntity>) {}
@@ -20,7 +9,7 @@ export class SettingsRepository {
     return this.repository.findOne({ where: {} });
   }
 
-  async update(settings: SettingsEntity, data: SettingsUpdateData) {
+  async update(settings: SettingsEntity, data: UpdateSettingsDataType) {
     if (data.cafeName !== undefined) settings.cafeName = data.cafeName;
     if (data.servicePercent !== undefined)
       settings.servicePercent = data.servicePercent;
