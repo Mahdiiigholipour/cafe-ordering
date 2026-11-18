@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthMessages } from "../../../common/enums/messages/auth.messages";
 import { UserRoles } from "../../../common/enums/user-roles.enum";
 import { ForbiddenError, UnauthorizedError } from "../../../common/errors";
+import { AuthMessages } from "../auth.messages";
 
 export function getAuthUser(req: Request) {
   const { user } = req;
@@ -16,7 +16,7 @@ export function authorize(...roles: UserRoles[]) {
     const user = getAuthUser(req);
 
     if (!allowedRoles.has(user.role))
-      throw new ForbiddenError(AuthMessages.ACCESS_DENIED);
+      throw new ForbiddenError(AuthMessages.PERMISSION_DENIED);
 
     next();
   };

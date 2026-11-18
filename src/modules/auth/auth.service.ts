@@ -3,6 +3,7 @@ import { UnauthorizedError } from "../../common/errors";
 import { comparePassword } from "../../common/utils/password.util";
 import { signAccessToken } from "../../common/utils/token.util";
 import { UsersService } from "../users/users.service";
+import { AuthMessages } from "./auth.messages";
 import { LoginDto } from "./schemas/login.schema";
 
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
     const hash = user?.password ?? DUMMY_PASSWORD_HASH;
     const ok = await comparePassword(password, hash);
     if (!user || !ok || !user.isActive)
-      throw new UnauthorizedError("Username or password is incorrect.");
+      throw new UnauthorizedError(AuthMessages.INVALID_CREDENTIALS);
 
     return {
       accessToken: signAccessToken(user.id),

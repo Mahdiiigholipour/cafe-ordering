@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthMessages } from "../../../common/enums/messages/auth.messages";
 import { UnauthorizedError } from "../../../common/errors";
 import { verifyAccessToken } from "../../../common/utils/token.util";
 import { UsersService } from "../../users/users.service";
+import { AuthMessages } from "../auth.messages";
 
 const BEARER_REGEX = /^Bearer\s+(\S+)$/i;
 
