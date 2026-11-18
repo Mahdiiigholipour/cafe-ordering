@@ -11,6 +11,4 @@ export const CategoriesMessages = {
 
   CATEGORY_HAS_PRODUCTS:
     "Category cannot be deleted because it contains products.",
-
-  AT_LEAST_ONE_FIELD: "In update body, least one field required",
 } as const;
