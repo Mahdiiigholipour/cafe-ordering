@@ -7,7 +7,7 @@ import { AuthMessages } from "../auth.messages";
 const BEARER_REGEX = /^Bearer\s+(\S+)$/i;
 
 export function createAuthenticate(usersService: UsersService) {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     const match = BEARER_REGEX.exec(req.headers.authorization ?? "");
 
     if (!match)

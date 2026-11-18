@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
@@ -11,7 +11,7 @@ import { UpdateProductDto } from "./schemas/update-product.schema";
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  getProductsList = async (req: Request, res: Response, next: NextFunction) => {
+  getProductsList = async (_req: Request, res: Response) => {
     const query: FilterProductDto = res.locals.validatedQuery;
 
     const products = await this.productsService.list(query);
@@ -19,7 +19,7 @@ export class ProductsController {
     return res.status(200).json({ success: true, data: products });
   };
 
-  createProduct = async (req: Request, res: Response, next: NextFunction) => {
+  createProduct = async (_req: Request, res: Response) => {
     const dto: CreateProductDto = res.locals.validatedBody;
 
     const product = await this.productsService.create(dto);
@@ -31,7 +31,7 @@ export class ProductsController {
     });
   };
 
-  getProductById = async (req: Request, res: Response, next: NextFunction) => {
+  getProductById = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
     const product = await this.productsService.getById(params.id);
@@ -39,7 +39,7 @@ export class ProductsController {
     return res.status(200).json({ success: true, data: product });
   };
 
-  updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+  updateProduct = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     const dto: UpdateProductDto = res.locals.validatedBody;
 
@@ -52,15 +52,11 @@ export class ProductsController {
     });
   };
 
-  deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
+  deleteProduct = async (_req: Request, _res: Response) => {
     throw new BadRequestError(ProductsMessages.PRODUCT_DELETED);
   };
 
-  updateProductImage = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  updateProductImage = async (req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
@@ -76,11 +72,7 @@ export class ProductsController {
     });
   };
 
-  deleteProductImage = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  deleteProductImage = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
     const product = await this.productsService.removeImage(params.id);

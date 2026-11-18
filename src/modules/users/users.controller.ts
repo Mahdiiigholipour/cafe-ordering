@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { getAuthUser } from "../auth/middlewares/authorize.middleware";
 import { CreateUserDto } from "./schemas/create-user.schema";
@@ -10,13 +10,13 @@ import { UsersService } from "./users.service";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  getUsersList = async (req: Request, res: Response, next: NextFunction) => {
+  getUsersList = async (_req: Request, res: Response) => {
     const users = await this.usersService.list();
 
     return res.status(200).json({ success: true, data: users });
   };
 
-  createUser = async (req: Request, res: Response, next: NextFunction) => {
+  createUser = async (_req: Request, res: Response) => {
     const dto: CreateUserDto = res.locals.validatedBody;
 
     const user = await this.usersService.create(dto);
@@ -26,7 +26,7 @@ export class UsersController {
       .json({ success: true, message: UsersMessages.USER_CREATED, data: user });
   };
 
-  getUserById = async (req: Request, res: Response, next: NextFunction) => {
+  getUserById = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
 
     const user = await this.usersService.getById(params.id);
@@ -34,8 +34,8 @@ export class UsersController {
     return res.status(200).json({ success: true, data: user });
   };
 
-  updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const actingUser = getAuthUser(req);
+  updateUser = async (_req: Request, res: Response) => {
+    const actingUser = getAuthUser(_req);
     const body: UpdateUserDto = res.locals.validatedBody;
     const params: IdInParamsDto = res.locals.validatedParams;
 
@@ -48,7 +48,7 @@ export class UsersController {
     });
   };
 
-  resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  resetPassword = async (_req: Request, res: Response) => {
     const body: ResetPasswordDto = res.locals.validatedBody;
     const params: IdInParamsDto = res.locals.validatedParams;
 

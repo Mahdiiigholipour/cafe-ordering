@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { UploadsMessages } from "../../common/constants/uploads.messages";
 import { BadRequestError } from "../../common/errors";
 import { SettingsMessages } from "./settings.messages";
@@ -8,12 +8,12 @@ import { SettingsService } from "./settings.service";
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
-  getSettings = async (req: Request, res: Response, next: NextFunction) => {
+  getSettings = async (_req: Request, res: Response) => {
     const settings = await this.settingsService.get();
     return res.status(200).json({ success: true, data: settings });
   };
 
-  updateSettings = async (req: Request, res: Response, next: NextFunction) => {
+  updateSettings = async (_req: Request, res: Response) => {
     const dto: UpdateSettingsDto = res.locals.validatedBody;
     const settings = await this.settingsService.update(dto);
 
@@ -24,7 +24,7 @@ export class SettingsController {
     });
   };
 
-  setLogo = async (req: Request, res: Response, next: NextFunction) => {
+  setLogo = async (req: Request, res: Response) => {
     if (!req.file) throw new BadRequestError(UploadsMessages.FILE_REQUIRED);
 
     const settings = await this.settingsService.setLogo(req.file.path);
@@ -35,7 +35,7 @@ export class SettingsController {
     });
   };
 
-  removeLogo = async (req: Request, res: Response, next: NextFunction) => {
+  removeLogo = async (req: Request, res: Response) => {
     const settings = await this.settingsService.removeLogo();
     return res.status(200).json({
       success: true,
