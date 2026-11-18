@@ -1,6 +1,6 @@
 import { UserRoles } from "../../../common/enums/user-roles.enum";
 
-export interface UserResponse {
+export interface UsersResponse {
   id: string;
   username: string;
   fullName: string;

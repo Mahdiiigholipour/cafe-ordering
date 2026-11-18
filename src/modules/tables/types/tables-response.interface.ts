@@ -1,4 +1,4 @@
-export interface TableResponse {
+export interface TablesResponse {
   id: string;
   number: number;
   isActive: boolean;

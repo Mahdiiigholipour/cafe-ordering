@@ -5,16 +5,16 @@ import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
 import { CategoriesRepository } from "./categories.repository";
 import { CategoryEntity } from "./category.entity";
-import { CategoryResponse } from "./interfaces/category-response.interface";
 import { CreateCategoryDto } from "./schemas/create-category.schema";
 import { UpdateCategoryDto } from "./schemas/update-category.schema";
+import { CategoriesResponse } from "./types/category-response.interface";
 
 export class CategoriesService {
   constructor(private readonly categoriesRepo: CategoriesRepository) {}
 
   async list(isActive?: boolean) {
     const categories = await this.categoriesRepo.findAll({ isActive });
-    return categories.map(this.toCategoryResponse);
+    return categories.map(this.toResponse);
   }
 
   async getById(id: string) {
@@ -22,7 +22,7 @@ export class CategoriesService {
     if (!category)
       throw new NotFoundError(CategoriesMessages.CATEGORY_NOT_FOUND);
 
-    return this.toCategoryResponse(category);
+    return this.toResponse(category);
   }
 
   async create(dto: CreateCategoryDto) {
@@ -31,7 +31,7 @@ export class CategoriesService {
       throw new ConflictError(CategoriesMessages.CATEGORY_ALREADY_EXISTS);
 
     const created = await this.categoriesRepo.create(dto);
-    return this.toCategoryResponse(created);
+    return this.toResponse(created);
   }
 
   async update(id: string, dto: UpdateCategoryDto) {
@@ -49,7 +49,7 @@ export class CategoriesService {
     }
 
     const updated = await this.categoriesRepo.update(category, dto);
-    return this.toCategoryResponse(updated);
+    return this.toResponse(updated);
   }
 
   async delete(id: string) {
@@ -79,7 +79,7 @@ export class CategoriesService {
 
     if (oldImage) await deleteUploadedFile(oldImage);
 
-    return this.toCategoryResponse(updated);
+    return this.toResponse(updated);
   }
 
   async removeImage(id: string) {
@@ -93,12 +93,12 @@ export class CategoriesService {
     const updated = await this.categoriesRepo.updateImage(category, null);
     await deleteUploadedFile(oldImage);
 
-    return this.toCategoryResponse(updated);
+    return this.toResponse(updated);
   }
 
   // ----- Private helpers -----
 
-  private toCategoryResponse(category: CategoryEntity): CategoryResponse {
+  private toResponse(category: CategoryEntity): CategoriesResponse {
     return {
       id: category.id,
       name: category.name,
