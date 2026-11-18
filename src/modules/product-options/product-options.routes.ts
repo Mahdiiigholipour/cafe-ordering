@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { productOptionService } from ".";
 import { validate } from "../../common/middlewares/validate.middleware";
+import { authenticate } from "../auth";
 import { authorize } from "../auth/middlewares/authorize.middleware";
 import { ProductOptionsController } from "./product-options.controller";
 import { CreateProductOptionSchema } from "./schemas/create-product-option.schema";
@@ -14,7 +15,7 @@ import { UpdateProductOptionSchema } from "./schemas/update-product-option.schem
 const controller = new ProductOptionsController(productOptionService);
 const router = Router({ mergeParams: true });
 
-router.use(authorize());
+router.use(authenticate, authorize());
 
 router
   .route("/")

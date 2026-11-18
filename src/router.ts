@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { authenticate } from "./modules/auth";
 import AuthRouter from "./modules/auth/auth.routes";
 import CategoriesRouter from "./modules/categories/categories.routes";
 import ProductOptionsRouter from "./modules/product-options/product-options.routes";
@@ -11,13 +10,9 @@ import UsersRouter from "./modules/users/users.routes";
 export const AppRouter = Router();
 
 AppRouter.use("/auth", AuthRouter);
-AppRouter.use("/users", authenticate, UsersRouter);
-AppRouter.use("/categories", authenticate, CategoriesRouter);
-AppRouter.use(
-  "/products/:productId/options",
-  authenticate,
-  ProductOptionsRouter,
-);
-AppRouter.use("/products", authenticate, ProductsRouter);
-AppRouter.use("/tables", authenticate, TablesRouter);
-AppRouter.use("/settings", authenticate, SettingsRouter);
+AppRouter.use("/users", UsersRouter);
+AppRouter.use("/categories", CategoriesRouter);
+AppRouter.use("/products/:productId/options", ProductOptionsRouter);
+AppRouter.use("/products", ProductsRouter);
+AppRouter.use("/tables", TablesRouter);
+AppRouter.use("/settings", SettingsRouter);
