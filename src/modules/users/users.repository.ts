@@ -1,6 +1,10 @@
 import { Repository } from "typeorm";
 import { UserRoles } from "../../common/enums/user-roles.enum";
 import { UserEntity } from "./entities/user.entity";
+import {
+  CreateUserDataType,
+  UpdateUserDataType,
+} from "./types/repository.types";
 
 export class UsersRepository {
   constructor(private readonly repository: Repository<UserEntity>) {}
@@ -26,9 +30,7 @@ export class UsersRepository {
     return this.repository.find({ order: { createdAt: "ASC" } });
   }
 
-  async create(
-    data: Pick<UserEntity, "username" | "password" | "role" | "fullName">,
-  ) {
+  async create(data: CreateUserDataType) {
     const user = this.repository.create(data);
     await this.repository.save(user);
 
@@ -37,7 +39,7 @@ export class UsersRepository {
     return safeUser;
   }
 
-  async update(user: UserEntity, data: Partial<UserEntity>) {
+  async update(user: UserEntity, data: UpdateUserDataType) {
     if (data.isActive !== undefined) user.isActive = data.isActive;
     if (data.role !== undefined) user.role = data.role;
     if (data.password !== undefined) user.password = data.password;
