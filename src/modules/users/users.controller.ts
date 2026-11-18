@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { UsersMessages } from "../../common/enums/messages/users.messages";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { getAuthUser } from "../auth/middlewares/authorize.middleware";
 import { CreateUserDto } from "./schemas/create-user.schema";
 import { ResetPasswordDto } from "./schemas/reset-password.schema";
 import { UpdateUserDto } from "./schemas/update-user.schema";
+import { UsersMessages } from "./users.messages";
 import { UsersService } from "./users.service";
 
 export class UsersController {
@@ -54,12 +54,10 @@ export class UsersController {
 
     const user = await this.usersService.resetPassword(params.id, body);
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: UsersMessages.USER_PASSWORD_UPDATED,
-        data: user,
-      });
+    return res.status(200).json({
+      success: true,
+      message: UsersMessages.USER_PASSWORD_UPDATED,
+      data: user,
+    });
   };
 }
