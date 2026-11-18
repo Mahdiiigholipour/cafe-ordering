@@ -4,7 +4,7 @@ import { UserEntity } from "./entities/user.entity";
 import {
   CreateUserDataType,
   UpdateUserDataType,
-} from "./types/repository.types";
+} from "./types/users-repository.types";
 
 export class UsersRepository {
   constructor(private readonly repository: Repository<UserEntity>) {}

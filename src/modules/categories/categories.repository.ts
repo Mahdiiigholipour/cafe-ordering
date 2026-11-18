@@ -4,7 +4,7 @@ import { CategoryEntity } from "./category.entity";
 import {
   CreateCategoryDataType,
   UpdateCategoryDataType,
-} from "./types/repository.types";
+} from "./types/category-repository.types";
 
 export class CategoriesRepository {
   constructor(

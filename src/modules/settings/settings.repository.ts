@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { SettingsEntity } from "./settings.entity";
-import { UpdateSettingsDataType } from "./types/repository.types";
+import { UpdateSettingsDataType } from "./types/settings-repository.types";
 
 export class SettingsRepository {
   constructor(private readonly repository: Repository<SettingsEntity>) {}

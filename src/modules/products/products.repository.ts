@@ -4,7 +4,7 @@ import {
   CreateProductDataType,
   FilterProductDataType,
   UpdateProductDataType,
-} from "./types/repository.types";
+} from "./types/product-repository.types";
 
 export class ProductsRepository {
   constructor(private readonly repository: Repository<ProductEntity>) {}

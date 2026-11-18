@@ -4,7 +4,7 @@ import {
   CreateTableDataType,
   FilterTablesDataType,
   UpdateTableDataType,
-} from "./types/repository.types";
+} from "./types/tables-repository.types";
 
 export class TablesRepository {
   constructor(private readonly repository: Repository<TableEntity>) {}
