@@ -2,18 +2,18 @@ import path from "node:path";
 import { ConflictError, InternalServerError } from "../../common/errors";
 import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
-import { SettingsResponse } from "./interfaces/settings-response.interface";
 import { SettingsEntity } from "./settings.entity";
 import { SettingsMessages } from "./settings.messages";
 import { SettingsRepository } from "./settings.repository";
 import { UpdateSettingsDto } from "./settings.schema";
+import { SettingsResponse } from "./types/settings-response.interface";
 
 export class SettingsService {
   constructor(private readonly settingsRepo: SettingsRepository) {}
 
   async get() {
     const settings = await this.getEntityOrThrow();
-    return this.toSettingsResponse(settings);
+    return this.toResponse(settings);
   }
 
   async update(dto: UpdateSettingsDto) {
@@ -28,7 +28,7 @@ export class SettingsService {
       throw new ConflictError(SettingsMessages.SAME_OPENING_AND_CLOSING_TIME);
 
     const updated = await this.settingsRepo.update(settings, dto);
-    return this.toSettingsResponse(updated);
+    return this.toResponse(updated);
   }
 
   async setLogo(filePath: string) {
@@ -41,7 +41,7 @@ export class SettingsService {
 
     if (oldLogo) await deleteUploadedFile(oldLogo);
 
-    return this.toSettingsResponse(updated);
+    return this.toResponse(updated);
   }
 
   async removeLogo() {
@@ -51,11 +51,11 @@ export class SettingsService {
 
     if (oldLogo) await deleteUploadedFile(oldLogo);
 
-    return this.toSettingsResponse(updated);
+    return this.toResponse(updated);
   }
 
   //----- Private helpers
-  private toSettingsResponse(settings: SettingsEntity): SettingsResponse {
+  private toResponse(settings: SettingsEntity): SettingsResponse {
     return {
       cafeName: settings.cafeName,
       logo: settings.logo,

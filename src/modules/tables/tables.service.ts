@@ -2,7 +2,6 @@ import { randomBytes } from "node:crypto";
 import QRCode from "qrcode";
 import { ConflictError, NotFoundError } from "../../common/errors";
 import env from "../../config/env";
-import { TableResponse } from "./interfaces/table-response.interface";
 import { TableEntity } from "./table.entity";
 import { TablesMessages } from "./tables.messages";
 import { TablesRepository } from "./tables.repository";
@@ -11,19 +10,20 @@ import {
   ListTablesQueryDto,
   UpdateTableDto,
 } from "./tables.schema";
+import { TablesResponse } from "./types/tables-response.interface";
 
 export class TablesService {
   constructor(private readonly tablesRepo: TablesRepository) {}
 
   async getAll(filters: ListTablesQueryDto) {
     const tables = await this.tablesRepo.findAll(filters);
-    return tables.map((table) => this.toTableResponse(table));
+    return tables.map((table) => this.toResponse(table));
   }
 
   async getById(id: string) {
     const table = await this.getEntityOrThrow(id);
 
-    return this.toTableResponse(table);
+    return this.toResponse(table);
   }
 
   async create(dto: CreateTableDto) {
@@ -35,7 +35,7 @@ export class TablesService {
 
     const table = await this.tablesRepo.create({ qrToken, number: dto.number });
 
-    return this.toTableResponse(table);
+    return this.toResponse(table);
   }
 
   async update(id: string, dto: UpdateTableDto) {
@@ -48,7 +48,7 @@ export class TablesService {
     }
 
     const updated = await this.tablesRepo.update(table, dto);
-    return this.toTableResponse(updated);
+    return this.toResponse(updated);
   }
 
   async getQrImage(id: string) {
@@ -67,7 +67,7 @@ export class TablesService {
   }
 
   //---- Private helpers -----
-  private toTableResponse(table: TableEntity): TableResponse {
+  private toResponse(table: TableEntity): TablesResponse {
     return {
       id: table.id,
       number: table.number,

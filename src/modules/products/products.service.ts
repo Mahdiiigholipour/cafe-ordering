@@ -3,12 +3,12 @@ import { ConflictError, NotFoundError } from "../../common/errors";
 import { deleteUploadedFile } from "../../common/utils/file.util";
 import env from "../../config/env";
 import { CategoriesService } from "../categories/categories.service";
-import { ProductResponse } from "./interfaces/product-response.interface";
 import { ProductEntity } from "./product.entity";
 import { ProductsRepository } from "./products.repository";
 import { CreateProductDto } from "./schemas/create-product.schema";
 import { FilterProductDto } from "./schemas/filter-product.schema";
 import { UpdateProductDto } from "./schemas/update-product.schema";
+import { ProductsResponse } from "./types/products-response.interface";
 
 export class ProductsService {
   constructor(
@@ -18,14 +18,14 @@ export class ProductsService {
 
   async list(filters?: FilterProductDto) {
     const products = await this.productsRepo.findAll(filters);
-    return products.map(this.toProductResponse);
+    return products.map(this.toResponse);
   }
 
   async getById(id: string) {
     const product = await this.productsRepo.findById(id);
     if (!product) throw new NotFoundError("Product not found.");
 
-    return this.toProductResponse(product);
+    return this.toResponse(product);
   }
 
   async create(data: CreateProductDto) {
@@ -36,7 +36,7 @@ export class ProductsService {
 
     const created = await this.productsRepo.create(data);
     const product = await this.productsRepo.findById(created.id);
-    return this.toProductResponse(product!);
+    return this.toResponse(product!);
   }
 
   async update(id: string, data: UpdateProductDto) {
@@ -56,7 +56,7 @@ export class ProductsService {
 
     await this.productsRepo.update(product, data);
     const refreshed = await this.productsRepo.findById(id);
-    return this.toProductResponse(refreshed!);
+    return this.toResponse(refreshed!);
   }
 
   async delete(id: string) {
@@ -73,7 +73,7 @@ export class ProductsService {
 
     if (oldImage) await deleteUploadedFile(oldImage);
 
-    return this.toProductResponse(product);
+    return this.toResponse(product);
   }
 
   async removeImage(id: string) {
@@ -84,11 +84,11 @@ export class ProductsService {
     const updated = await this.productsRepo.updateImage(product, null);
     if (oldImage) await deleteUploadedFile(oldImage);
 
-    return this.toProductResponse(updated);
+    return this.toResponse(updated);
   }
 
   //---- Private handlers
-  private toProductResponse(product: ProductEntity): ProductResponse {
+  private toResponse(product: ProductEntity): ProductsResponse {
     return {
       id: product.id,
       name: product.name,

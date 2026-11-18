@@ -11,7 +11,7 @@ import { ProductOptionsRepository } from "./product-options.repository";
 import { CreateProductOptionDto } from "./schemas/create-product-option.schema";
 import { ListProductOptionsQuery } from "./schemas/list-product-option-query.schema";
 import { UpdateProductOptionDto } from "./schemas/update-product-option.schema";
-import { ProductOptionsResponse } from "./types/service.types";
+import { ProductOptionsResponse } from "./types/product-options-response.interface";
 
 export class ProductOptionsService {
   constructor(

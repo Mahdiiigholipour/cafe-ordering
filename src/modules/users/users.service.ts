@@ -3,10 +3,10 @@ import { UserRoles } from "../../common/enums/user-roles.enum";
 import { ConflictError, NotFoundError } from "../../common/errors";
 import { hashPassword } from "../../common/utils/password.util";
 import { UserEntity } from "./entities/user.entity";
-import { UserResponse } from "./interfaces/user-response.interface";
 import { CreateUserDto } from "./schemas/create-user.schema";
 import { ResetPasswordDto } from "./schemas/reset-password.schema";
 import { UpdateUserDto } from "./schemas/update-user.schema";
+import { UsersResponse } from "./types/users-response.interface";
 import { UsersRepository } from "./users.repository";
 
 export class UsersService {
@@ -24,7 +24,7 @@ export class UsersService {
   //------ Users' controller methods -------
   async list() {
     const users = await this.usersRepo.findAll();
-    return users.map(this.toUserResponse);
+    return users.map(this.toResponse);
   }
 
   async create(data: CreateUserDto) {
@@ -40,14 +40,14 @@ export class UsersService {
       fullName: data.fullName,
     });
 
-    return this.toUserResponse(user);
+    return this.toResponse(user);
   }
 
   async getById(id: string) {
     const user = await this.findById(id);
     if (!user) throw new NotFoundError(UsersMessages.USER_NOT_FOUND);
 
-    return this.toUserResponse(user);
+    return this.toResponse(user);
   }
 
   async update(actingUserId: string, targetId: string, data: UpdateUserDto) {
@@ -73,7 +73,7 @@ export class UsersService {
 
     const updated = await this.usersRepo.update(targetUser, data);
 
-    return this.toUserResponse(updated);
+    return this.toResponse(updated);
   }
 
   async countActiveAdmins() {
@@ -88,12 +88,12 @@ export class UsersService {
 
     const updated = await this.usersRepo.update(user, { password: hashed });
 
-    return this.toUserResponse(updated);
+    return this.toResponse(updated);
   }
 
   //------ Private helpers -------
 
-  private toUserResponse(user: Omit<UserEntity, "password">): UserResponse {
+  private toResponse(user: Omit<UserEntity, "password">): UsersResponse {
     return {
       id: user.id,
       username: user.username,
