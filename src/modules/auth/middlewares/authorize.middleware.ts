@@ -12,7 +12,7 @@ export function getAuthUser(req: Request) {
 export function authorize(...roles: UserRoles[]) {
   const allowedRoles = new Set<UserRoles>([UserRoles.Admin, ...roles]);
 
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     const user = getAuthUser(req);
 
     if (!allowedRoles.has(user.role))

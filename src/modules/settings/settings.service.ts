@@ -11,12 +11,12 @@ import { SettingsResponse } from "./types/settings-response.interface";
 export class SettingsService {
   constructor(private readonly settingsRepo: SettingsRepository) {}
 
-  async get() {
+  public async get() {
     const settings = await this.getEntityOrThrow();
     return this.toResponse(settings);
   }
 
-  async update(dto: UpdateSettingsDto) {
+  public async update(dto: UpdateSettingsDto) {
     const settings = await this.getEntityOrThrow();
 
     const openingTime =
@@ -33,7 +33,7 @@ export class SettingsService {
     return this.toResponse(updated);
   }
 
-  async setLogo(filePath: string) {
+  public async setLogo(filePath: string) {
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
     const settings = await this.getEntityOrThrow();
     const oldLogo = settings.logo;
@@ -46,7 +46,7 @@ export class SettingsService {
     return this.toResponse(updated);
   }
 
-  async removeLogo() {
+  public async removeLogo() {
     const settings = await this.getEntityOrThrow();
     const oldLogo = settings.logo;
     const updated = await this.settingsRepo.update(settings, { logo: null });
@@ -56,7 +56,6 @@ export class SettingsService {
     return this.toResponse(updated);
   }
 
-  //----- Private helpers
   private toResponse(settings: SettingsEntity): SettingsResponse {
     return {
       cafeName: settings.cafeName,

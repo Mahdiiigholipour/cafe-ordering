@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { IdInParamsDto } from "../../common/validations/id-in-params.schema";
 import { TablesMessages } from "./tables.messages";
 import {
@@ -11,15 +11,15 @@ import { TablesService } from "./tables.service";
 export class TablesController {
   constructor(private readonly tablesService: TablesService) {}
 
-  getTablesList = async (req: Request, res: Response, next: NextFunction) => {
+  getTablesList = async (_req: Request, res: Response) => {
     const query: ListTablesQueryDto = res.locals.validatedQuery;
 
-    const tables = await this.tablesService.getAll(query);
+    const tables = await this.tablesService.list(query);
 
     return res.status(200).json({ success: true, data: tables });
   };
 
-  createTable = async (req: Request, res: Response, next: NextFunction) => {
+  createTable = async (_req: Request, res: Response) => {
     const dto: CreateTableDto = res.locals.validatedBody;
     const table = await this.tablesService.create(dto);
 
@@ -30,14 +30,14 @@ export class TablesController {
     });
   };
 
-  getTableById = async (req: Request, res: Response, next: NextFunction) => {
+  getTableById = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     const table = await this.tablesService.getById(params.id);
 
     return res.status(200).json({ success: true, data: table });
   };
 
-  updateTable = async (req: Request, res: Response, next: NextFunction) => {
+  updateTable = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     const dto: UpdateTableDto = res.locals.validatedBody;
     const table = await this.tablesService.update(params.id, dto);
@@ -49,7 +49,7 @@ export class TablesController {
     });
   };
 
-  getQrImage = async (req: Request, res: Response, next: NextFunction) => {
+  getQrImage = async (_req: Request, res: Response) => {
     const params: IdInParamsDto = res.locals.validatedParams;
     const { qrBuffer, tableNumber } = await this.tablesService.getQrImage(
       params.id,

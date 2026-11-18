@@ -17,33 +17,30 @@ export class ProductsService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async list(filters?: FilterProductDto) {
+  public async list(filters?: FilterProductDto) {
     const products = await this.productsRepo.findAll(filters);
-    return products.map(this.toResponse);
+    return products.map((product) => this.toResponse(product));
   }
 
-  async getById(id: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
-
+  public async getById(id: string) {
+    const product = await this.getEntityOrThrow(id);
     return this.toResponse(product);
   }
 
-  async create(data: CreateProductDto) {
+  public async create(data: CreateProductDto) {
     const existsProduct = await this.productsRepo.findByName(data.name);
     if (existsProduct)
       throw new ConflictError(ProductsMessages.PRODUCT_ALREADY_EXISTS);
 
-    const category = await this.categoriesService.getById(data.categoryId);
+    await this.categoriesService.getById(data.categoryId);
 
     const created = await this.productsRepo.create(data);
     const product = await this.productsRepo.findById(created.id);
     return this.toResponse(product!);
   }
 
-  async update(id: string, data: UpdateProductDto) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+  public async update(id: string, data: UpdateProductDto) {
+    const product = await this.getEntityOrThrow(id);
 
     if (data.categoryId !== undefined)
       await this.categoriesService.getById(data.categoryId);
@@ -62,13 +59,12 @@ export class ProductsService {
     return this.toResponse(refreshed!);
   }
 
-  async delete(id: string) {
+  public async delete(id: string) {
     // Will be complete after orders module developed
   }
 
-  async updateImage(id: string, filePath: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+  public async updateImage(id: string, filePath: string) {
+    const product = await this.getEntityOrThrow(id);
 
     const relativePath = path.relative(env.UPLOADS_DIR, filePath);
     const oldImage = product.image;
@@ -76,12 +72,11 @@ export class ProductsService {
 
     if (oldImage) await deleteUploadedFile(oldImage);
 
-    return this.toResponse(product);
+    return this.toResponse(updated);
   }
 
-  async removeImage(id: string) {
-    const product = await this.productsRepo.findById(id);
-    if (!product) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+  public async removeImage(id: string) {
+    const product = await this.getEntityOrThrow(id);
 
     const oldImage = product.image;
     const updated = await this.productsRepo.updateImage(product, null);
@@ -90,7 +85,6 @@ export class ProductsService {
     return this.toResponse(updated);
   }
 
-  //---- Private handlers
   private toResponse(product: ProductEntity): ProductsResponse {
     return {
       id: product.id,
@@ -106,5 +100,12 @@ export class ProductsService {
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
     };
+  }
+
+  private async getEntityOrThrow(id: string) {
+    const entity = await this.productsRepo.findById(id);
+    if (!entity) throw new NotFoundError(ProductsMessages.PRODUCT_NOT_FOUND);
+
+    return entity;
   }
 }
