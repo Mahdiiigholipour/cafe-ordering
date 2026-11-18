@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticate } from "./modules/auth";
 import AuthRouter from "./modules/auth/auth.routes";
 import CategoriesRouter from "./modules/categories/categories.routes";
+import ProductOptionsRoutes from "./modules/product-options/product-options.routes";
 import ProductsRouter from "./modules/products/products.routes";
 import SettingsRouter from "./modules/settings/settings.routes";
 import TablesRouter from "./modules/tables/tables.routes";
@@ -12,6 +13,11 @@ export const AppRouter = Router();
 AppRouter.use("/auth", AuthRouter);
 AppRouter.use("/users", authenticate, UsersRouter);
 AppRouter.use("/categories", authenticate, CategoriesRouter);
+AppRouter.use(
+  "/products/:productId/options",
+  authenticate,
+  ProductOptionsRoutes,
+);
 AppRouter.use("/products", authenticate, ProductsRouter);
 AppRouter.use("/tables", authenticate, TablesRouter);
 AppRouter.use("/settings", authenticate, SettingsRouter);
