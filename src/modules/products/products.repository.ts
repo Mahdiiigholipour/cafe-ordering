@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Like, Repository } from "typeorm";
-import { ProductEntity } from "./entities/product.entity";
+import { ProductEntity } from "./product.entity";
 import { CreateProductDto } from "./schemas/create-product.schema";
 import { FilterProductDto } from "./schemas/filter-product.schema";
 import { UpdateProductDto } from "./schemas/update-product.schema";

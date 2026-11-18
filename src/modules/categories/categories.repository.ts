@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { ProductEntity } from "../products/entities/product.entity";
+import { ProductEntity } from "../products/product.entity";
 import { CategoryEntity } from "./category.entity";
 import { CreateCategoryDto } from "./schemas/create-category.schema";
 import { UpdateCategoryDto } from "./schemas/update-category.schema";

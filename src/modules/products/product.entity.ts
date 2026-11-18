@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { AppBaseEntity } from "../../../common/entities/base.entity";
-import { CategoryEntity } from "../../categories/category.entity";
-import { ProductOptionEntity } from "./product-option.entity";
+import { AppBaseEntity } from "../../common/entities/base.entity";
+import { CategoryEntity } from "../categories/category.entity";
+import { ProductOptionEntity } from "../product-options/product-option.entity";
 
 @Entity("products")
 export class ProductEntity extends AppBaseEntity {
