@@ -1,4 +1,8 @@
-import { ConflictError, NotFoundError } from "../../common/errors";
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+} from "../../common/errors";
 import { ProductsService } from "../products/products.service";
 import { ProductOptionTypes } from "./enums/product-option-type.enum";
 import { ProductOptionEntity } from "./product-option.entity";
@@ -61,7 +65,7 @@ export class ProductOptionsService {
       dto.priceDelta !== undefined &&
       dto.priceDelta !== 0
     )
-      throw new ConflictError(
+      throw new BadRequestError(
         ProductOptionsMessages.REMOVAL_OPTION_PRICE_INVALID,
       );
 
