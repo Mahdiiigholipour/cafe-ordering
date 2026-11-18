@@ -33,7 +33,7 @@ export function createImageUpload(module: UploadModule) {
     fileFilter: (_req, file, cb) => {
       if (!ALLOWED_MIME_TYPES.includes(file.mimetype))
         return cb(
-          new UnsupportedMediaTypeError(UploadsMessages.INVALID_MIME_TYPES),
+          new UnsupportedMediaTypeError(UploadsMessages.INVALID_MIME_TYPE),
         );
 
       cb(null, true);

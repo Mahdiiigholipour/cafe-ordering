@@ -25,7 +25,9 @@ export class SettingsService {
       dto.closingTime ?? this.normalizeTime(settings.closingTime);
 
     if (openingTime === closingTime)
-      throw new ConflictError(SettingsMessages.SAME_OPENING_AND_CLOSING_TIME);
+      throw new ConflictError(
+        SettingsMessages.OPENING_AND_CLOSING_TIME_MUST_DIFFER,
+      );
 
     const updated = await this.settingsRepo.update(settings, dto);
     return this.toResponse(updated);
@@ -69,7 +71,8 @@ export class SettingsService {
 
   private async getEntityOrThrow() {
     const settings = await this.settingsRepo.find();
-    if (!settings) throw new InternalServerError("Settings not found");
+    if (!settings)
+      throw new InternalServerError(SettingsMessages.SETTINGS_NOT_FOUND);
 
     return settings;
   }
