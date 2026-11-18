@@ -1,9 +1,9 @@
 import { Repository } from "typeorm";
-import { SettingEntity } from "./setting.entity";
+import { SettingsEntity } from "./settings.entity";
 
 type SettingsUpdateData = Partial<
   Pick<
-    SettingEntity,
+    SettingsEntity,
     | "cafeName"
     | "openingTime"
     | "closingTime"
@@ -14,13 +14,13 @@ type SettingsUpdateData = Partial<
 >;
 
 export class SettingsRepository {
-  constructor(private readonly repository: Repository<SettingEntity>) {}
+  constructor(private readonly repository: Repository<SettingsEntity>) {}
 
   async find() {
     return this.repository.findOne({ where: {} });
   }
 
-  async update(settings: SettingEntity, data: SettingsUpdateData) {
+  async update(settings: SettingsEntity, data: SettingsUpdateData) {
     if (data.cafeName !== undefined) settings.cafeName = data.cafeName;
     if (data.servicePercent !== undefined)
       settings.servicePercent = data.servicePercent;

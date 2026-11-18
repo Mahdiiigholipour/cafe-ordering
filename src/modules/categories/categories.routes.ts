@@ -4,6 +4,7 @@ import { UserRoles } from "../../common/enums/user-roles.enum";
 import { createImageUpload } from "../../common/middlewares/upload.middleware";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { IdInParamsSchema } from "../../common/validations/id-in-params.schema";
+import { authenticate } from "../auth";
 import { authorize } from "../auth/middlewares/authorize.middleware";
 import { CategoriesController } from "./categories.controller";
 import { CreateCategorySchema } from "./schemas/create-category.schema";
@@ -14,6 +15,7 @@ const categoriesController = new CategoriesController(categoriesService);
 const upload = createImageUpload("categories");
 const router = Router();
 
+router.use(authenticate);
 router.get(
   "/",
   authorize(UserRoles.Staff),

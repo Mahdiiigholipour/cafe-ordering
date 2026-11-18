@@ -1,8 +1,8 @@
 import { EntityManager } from "typeorm";
-import { SettingEntity } from "../../modules/settings/setting.entity";
+import { SettingsEntity } from "../../modules/settings/settings.entity";
 
 export async function seedSetting(manager: EntityManager) {
-  const settingRepository = manager.getRepository(SettingEntity);
+  const settingRepository = manager.getRepository(SettingsEntity);
 
   if ((await settingRepository.count()) > 0) {
     console.log("Settings already exist, skipped.");

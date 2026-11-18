@@ -4,6 +4,7 @@ import { UserRoles } from "../../common/enums/user-roles.enum";
 import { createImageUpload } from "../../common/middlewares/upload.middleware";
 import { validate } from "../../common/middlewares/validate.middleware";
 import { IdInParamsSchema } from "../../common/validations/id-in-params.schema";
+import { authenticate } from "../auth";
 import { authorize } from "../auth/middlewares/authorize.middleware";
 import { ProductsController } from "./products.controller";
 import { CreateProductSchema } from "./schemas/create-product.schema";
@@ -14,6 +15,7 @@ const productsController = new ProductsController(productsService);
 const upload = createImageUpload("products");
 const router = Router();
 
+router.use(authenticate);
 router
   .route("/")
   .get(
