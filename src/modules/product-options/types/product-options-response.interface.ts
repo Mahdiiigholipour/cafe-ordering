@@ -1,4 +1,4 @@
-import { ProductOptionTypes } from "../enums/product-option-type.enum";
+import { ProductOptionTypes } from "../../../common/enums/product-option-type.enum";
 
 export interface ProductOptionsResponse {
   id: string;

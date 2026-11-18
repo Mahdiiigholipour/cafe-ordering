@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { AppBaseEntity } from "../../common/entities/base.entity";
+import { ProductOptionTypes } from "../../common/enums/product-option-type.enum";
 import { ProductEntity } from "../products/product.entity";
-import { ProductOptionTypes } from "./enums/product-option-type.enum";
 
 @Entity("product_options")
 export class ProductOptionEntity extends AppBaseEntity {

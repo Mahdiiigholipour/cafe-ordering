@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { ProductOptionTypes } from "./enums/product-option-type.enum";
+import { ProductOptionTypes } from "../../common/enums/product-option-type.enum";
 import { ProductOptionEntity } from "./product-option.entity";
 import {
   CreateProductOptionsData,
